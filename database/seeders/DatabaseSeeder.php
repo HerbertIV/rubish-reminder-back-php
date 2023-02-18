@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Admin;
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +17,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Admin::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+        ]);
+        $this->call(PermissionSeeder::class);
+        $this->userSuperadmin = Admin::findOrFail(1);
+        $this->setRoles();
     }
+
+    private function setRoles(): void
+    {
+        $role = Role::findOrCreate('superadmin');
+        $this->userSuperadmin->roles()->attach(1);
+
+        $permissions = Permission::all();
+        $role->givePermissionTo($permissions->pluck('name'));
+    }
+
 }

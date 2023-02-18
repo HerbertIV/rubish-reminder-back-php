@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+//use Custom\Core\Resource\Providers\CoreServiceProvider;
+//use Custom\Trippers\Resource\Providers\TrippersServiceProvider;
+//use Custom\Regions\Resource\Providers\RegionsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+//        $this->app->register(RegionsServiceProvider::class);
+//        $this->app->register(TrippersServiceProvider::class);
     }
 
     /**
