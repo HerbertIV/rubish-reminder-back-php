@@ -8,4 +8,9 @@ class RegionController extends Controller
     {
         return view('pages.region.index');
     }
+
+    public function create()
+    {
+        return view('pages.region.create');
+    }
 }

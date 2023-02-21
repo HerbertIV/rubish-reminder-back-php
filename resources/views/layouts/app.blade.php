@@ -14,11 +14,12 @@
         <!-- Styles -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@400;600;700&family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('vendor/bootstrap.min.css') }}">
-        {{-- <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}"> --}}
+        <link rel="stylesheet" href="{{ asset('css/tailwind.css') }}">
         <link rel="stylesheet" href="{{ asset('stisla/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('stisla/css/components.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/notyf/notyf.min.css') }}">
-        {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{{--        <link rel="stylesheet" href="{{ asset('css/app.css') }}">--}}
         @vite(['resources/js/app.js'])
 
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free-v4-shims.min.css" media="all">
@@ -69,12 +70,11 @@
         <script defer src="{{ asset('vendor/sweetalert/sweetalert.min.js') }}"></script>
         <script defer src="{{ asset('stisla/js/modules/chart.min.js') }}"></script>
         <script defer src="{{ asset('vendor/select2/select2.min.js') }}"></script>
-
         <script src="{{ asset('stisla/js/stisla.js') }}"></script>
         <script src="{{ asset('stisla/js/scripts.js') }}"></script>
 
         <livewire:scripts />
-        {{-- <script src="{{ mix('js/app.js') }}" defer></script> --}}
+         <script src="{{ asset('js/app.js') }}" defer></script>
 
         @isset($script)
             {{ $script }}

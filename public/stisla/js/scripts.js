@@ -328,7 +328,6 @@ $(function() {
   $('[data-toggle="popover"]').popover({
     container: 'body'
   });
-
   // Select2
   if(jQuery().select2) {
     $(".select2").select2();

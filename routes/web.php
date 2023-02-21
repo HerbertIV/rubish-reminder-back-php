@@ -27,4 +27,6 @@ Route::group([ "middleware" => ['auth:sanctum', config('jetstream.auth_session')
     Route::view('/user/edit/{userId}', "pages.user.user-edit")->name('user.edit');
 
     Route::resource('/regions', RegionController::class);
+
+    require 'async.php';
 });
