@@ -24,8 +24,8 @@ class RegionCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'min:3'],
-            'parent_id' => ['int', 'exists:regions,id'],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'parentId' => ['nullable', 'int', 'exists:regions,id'],
         ];
     }
 }

@@ -12,15 +12,19 @@
             <div class="form-group col-span-6 sm:col-span-5">
                 <x-jet-label for="name" value="{{ __('Name') }}" />
                 <small>Region name</small>
-                <x-jet-input id="name" type="text" class="mt-1 block w-full form-control shadow-none" wire:model.defer="name" />
+                <x-jet-input
+                    id="name"
+                    type="text"
+                    class="mt-1 block w-full form-control shadow-none"
+                    wire:model.defer="name" />
                 <x-jet-input-error for="name" class="mt-2" />
             </div>
             <livewire:components.inputs.select2
-                :selectedData="[]"
+                :selectedData="[$this->getParentIdSelect2Format()]"
                 isAjax="true"
                 label="Regions list"
                 url="{{ route('async.regions') }}"
-                name="parent_id" />
+                name="parentId" />
             @error('files') <span class="text-red-600">{{ $message }}</span> @enderror
         </x-slot>
 
