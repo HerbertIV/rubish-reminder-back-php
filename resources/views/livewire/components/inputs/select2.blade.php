@@ -29,14 +29,10 @@
                 </option>
             @endforeach
         @else
-            @if (!$isCustomTemp)
+            @if (!$isCustomTemp && ($selectedDatas ?? false))
                 @foreach($selectedData as $item)
                     <option selected value="{{ $item['id'] }}">
-                        @if(isset($item['name']) && $item['name'])
-                            {{ $item['name'] }}
-                        @else
-                            {{ $item['title'] ?? '' }}
-                        @endif
+                        {{ $item['text'] }}
                     </option>
                 @endforeach
             @endif
