@@ -151,3 +151,8 @@ textarea.form-control {
     position: relative;
 }
 /* End select2 */
+
+.custom-switch {
+    padding-left: 0!important;
+}
+

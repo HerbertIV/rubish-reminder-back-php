@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Http\Livewire;
 
 use App\Dtos\RegionDto;
-use App\Http\Requests\RegionCreateRequest;
+use App\Http\Requests\RegionRequest;
 use App\Http\Resources\AsyncResource;
 use App\Models\Region;
 use App\Services\Contracts\RegionServiceContract;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class RegionForm extends Component
 {
     private RegionServiceContract $regionService;
-    public string $name;
+    public ?string $name = '';
     public ?int $parentId = null;
     public Region $region;
     public string $action;
@@ -37,10 +40,10 @@ class RegionForm extends Component
 
     protected function getRules()
     {
-        return (new RegionCreateRequest)->rules();
+        return (new RegionRequest)->rules();
     }
 
-    public function createRegion()
+    public function createRegion(): void
     {
         $this->resetErrorBag();
         $this->validate();
@@ -52,18 +55,18 @@ class RegionForm extends Component
         $this->redirect(route('regions.show', $region));
     }
 
-    public function updateRegion()
+    public function updateRegion(): void
     {
         $this->resetErrorBag();
         $this->validate();
         $region = $this->region;
         $regionDto = new RegionDto($this->toArray());
         $this->regionService->update($regionDto, $region->getKey());
-        $this->emit('saved');
+        $this->emit('updated');
         $this->redirect(route('regions.show', $region));
     }
 
-    public function mount(?Region $region = null)
+    public function mount(?Region $region = null): void
     {
         if ($region) {
             $this->region = $region;
@@ -75,9 +78,9 @@ class RegionForm extends Component
         $this->button = create_button($this->action, 'Region');
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.region-form');
+        return view('pages.region.components.region-form');
     }
 
     public function getParentIdSelect2Format(): ?array
@@ -88,7 +91,7 @@ class RegionForm extends Component
         return null;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'name' => $this->name,
@@ -96,7 +99,7 @@ class RegionForm extends Component
         ];
     }
 
-    public function setData(array $data)
+    public function setData(array $data): void
     {
         foreach ($data as $k => $v) {
             $key = Str::studly($k);

@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Dtos\RegionDto;
-use App\Http\Requests\RegionCreateRequest;
+use App\Http\Requests\RegionRequest;
 use App\Models\Region;
 use App\Services\Contracts\RegionServiceContract;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class RegionController extends Controller
@@ -43,19 +44,19 @@ class RegionController extends Controller
     }
 
     //Currently using livewire
-    public function store(RegionCreateRequest $request)
+    public function store(RegionRequest $request): JsonResponse
     {
-        $regionDto = new RegionDto($this->toArray());
+        $regionDto = new RegionDto($request->validated());
         $this->regionService->create($regionDto);
         return response()->json([
             'success' => true
-        ]);
+        ], JsonResponse::HTTP_CREATED);
     }
 
     //Currently using livewire
-    public function update(RegionCreateRequest $request, Region $region)
+    public function update(RegionRequest $request, Region $region): JsonResponse
     {
-        $regionDto = new RegionDto($this->toArray());
+        $regionDto = new RegionDto($request->validated());
         $this->regionService->update($regionDto, $region->getKey());
         return response()->json([
             'success' => true

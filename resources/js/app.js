@@ -98,6 +98,13 @@ function select2Ajax() {
     });
 }
 
+function toggleSwitcher()
+{
+    $(document).on('change', '[data-switcher]', (e) => {
+        livewire.emit('toggleSwitcher', e.target.name, e.target.checked)
+    });
+}
+
 function clearSelect2()
 {
     $(document).on('click', '[data-select2-clear]', function () {
@@ -121,4 +128,5 @@ $(document).ready(function() {
     select2Ajax();
     clearSelect2();
     toggleBulkActions();
+    toggleSwitcher();
 });

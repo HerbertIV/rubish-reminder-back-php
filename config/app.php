@@ -214,7 +214,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Form' => \Custom\Forms\Logic\Facades\Form::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 ];

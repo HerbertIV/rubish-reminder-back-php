@@ -38,7 +38,7 @@ abstract class BaseRepository implements BaseRepositoryContract
      *
      * @return string
      */
-    abstract public function model();
+    abstract public function model(): string;
 
     /**
      * Make Model instance

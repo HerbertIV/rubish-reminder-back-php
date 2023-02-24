@@ -11,7 +11,7 @@
         <x-slot name="form">
             <div class="form-group col-span-6 sm:col-span-5">
                 <x-jet-label for="name" value="{{ __('Name') }}" />
-                <small>Region name</small>
+                <small>{{ __('Region name') }}</small>
                 <x-jet-input
                     id="name"
                     type="text"
@@ -22,10 +22,10 @@
             <livewire:components.inputs.select2
                 :selectedData="[$this->getParentIdSelect2Format()]"
                 isAjax="true"
-                label="Regions list"
+                label="{{ __('Regions list') }}"
                 url="{{ route('async.regions') }}"
                 name="parentId" />
-            @error('files') <span class="text-red-600">{{ $message }}</span> @enderror
+            @error('parentId') <span class="text-red-600">{{ $message }}</span> @enderror
         </x-slot>
 
         <x-slot name="actions">

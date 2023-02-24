@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class RegionRepository extends BaseRepository implements RegionRepositoryContract
 {
-    public function model()
+    public function model(): string
     {
         return Region::class;
     }
