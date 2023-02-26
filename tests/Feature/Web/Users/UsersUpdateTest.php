@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Web\Users;
 
-use App\Events\ProcessUserEmailChangeEvent;
-use App\Events\ProcessUserPhoneChangeEvent;
-use App\Http\Livewire\RegionForm;
+use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
+use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Http\Livewire\UserForm;
-use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;

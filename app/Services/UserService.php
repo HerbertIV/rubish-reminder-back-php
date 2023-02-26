@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Dtos\UserDto;
+use App\Enums\ProcessUserDataChangeEnums;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\Contracts\UserServiceContract;
@@ -44,6 +45,30 @@ class UserService implements UserServiceContract
     {
         $user = $this->first($id);
         $user->fillable($userDto->toArray());
+        $this->startProcess($userDto, $user);
         return $user->save();
+    }
+
+    public function setProcessEmail(string $token): void
+    {
+        //TODO;
+    }
+
+    private function startProcess(UserDto $userDto, User $user): void
+    {
+        if ($userDto->getEmail() && $user->email !== $userDto->getEmail()) {
+            $user->process_email_expire_at = now()->modify(
+                '+' . ProcessUserDataChangeEnums::PROCESS_EMAIL_CHANGE_ACTIVE . ' minutes'
+            );
+            $user->email_from_process = $userDto->getEmail();
+            $user->process_token = md5(microtime());
+        }
+        if ($userDto->getPhone() && $user->phone !== $userDto->getPhone()) {
+            $user->process_phone_expire_at = now()->modify(
+                '+' . ProcessUserDataChangeEnums::PROCESS_PHONE_CHANGE_ACTIVE . ' minutes'
+            );
+            $user->phone_from_process = $userDto->getPhone();
+            $user->sms_code = random_int(100000, 999999);
+        }
     }
 }

@@ -200,6 +200,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\RepositoriesServiceProvider::class,
         App\Providers\ServicesServiceProvider::class,
+        App\Providers\TemplateEmailServiceProvider::class,
     ],
 
     /*

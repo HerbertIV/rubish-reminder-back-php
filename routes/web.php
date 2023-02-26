@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::group(['prefix' => '/users/process'], function () {
+    Route::get('/change-email/{token}')->name('user.process.email');
+    Route::get('/change-phone')->name('user.process.phone');
+});
+
 
 Route::group([ "middleware" => ['auth:sanctum', config('jetstream.auth_session'), 'verified'] ], function() {
     Route::view('/dashboard', "dashboard")->name('dashboard');

@@ -9,6 +9,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -61,5 +62,11 @@ class UserController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    public function changeEmail(Request $request, string $token)
+    {
+        $this->userService->setProcessEmail($token);
+        return redirect()->route('users.index');
     }
 }
