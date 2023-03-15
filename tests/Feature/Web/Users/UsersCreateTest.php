@@ -21,10 +21,9 @@ class UsersCreateTest extends TestCase
     public function test_create_view()
     {
         $this
-            ->actingAs($this->user)
+            ->actingAs($this->admin)
             ->get(route('users.create'))
             ->assertOk();
-
         $this->view('pages.user.create')
             ->assertSee(__('Create User'))
             ->assertSee(__('First name'))
@@ -91,8 +90,8 @@ class UsersCreateTest extends TestCase
 
         Livewire::test(UserForm::class, ['action' => 'createUser'])
             ->set('email', 'user@example.com')
-            ->set('first_name', 'User')
-            ->set('last_name', 'Example')
+            ->set('firstName', 'User')
+            ->set('lastName', 'Example')
             ->set('phone', '123123123')
             ->set('active', 1)
             ->call('createUser')
@@ -104,10 +103,10 @@ class UsersCreateTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        Livewire::test(RegionForm::class, ['action' => 'createUser'])
+        Livewire::test(UserForm::class, ['action' => 'createUser'])
             ->call('createUser')
             ->assertHasErrors(['email' => 'required']);
-        Livewire::test(RegionForm::class, ['action' => 'createUser'])
+        Livewire::test(UserForm::class, ['action' => 'createUser'])
             ->set('email', 'aaa')
             ->call('createUser')
             ->assertHasErrors(['email' => 'email']);

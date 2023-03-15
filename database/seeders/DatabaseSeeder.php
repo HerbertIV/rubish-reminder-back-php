@@ -17,19 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Admin::factory()->create([
+        $admin = Admin::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
         ]);
         $this->call(PermissionSeeder::class);
-        $this->userSuperadmin = Admin::findOrFail(1);
+        $this->userSuperadmin = $admin;
         $this->setRoles();
     }
 
     private function setRoles(): void
     {
         $role = Role::findOrCreate('superadmin');
-        $this->userSuperadmin->roles()->attach(1);
+        $this->userSuperadmin->roles()->attach($role->getKey());
 
         $permissions = Permission::all();
         $role->givePermissionTo($permissions->pluck('name'));

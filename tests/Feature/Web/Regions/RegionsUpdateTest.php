@@ -83,7 +83,7 @@ class RegionsUpdateTest extends TestCase
         ])
             ->set('name', 'Region')
             ->call('updateRegion')
-            ->assertEmitted('saved');
+            ->assertEmitted('updated');
         $this->region->refresh();
         $this->assertTrue($this->region->name === 'Region');
     }

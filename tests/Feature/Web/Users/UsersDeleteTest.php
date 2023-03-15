@@ -17,7 +17,7 @@ class UsersDeleteTest extends TestCase
         $this->appUser = User::factory()->create();
     }
 
-    public function test_success_delete_region()
+    public function test_success_delete_user()
     {
         $this
             ->actingAs($this->user)
@@ -25,7 +25,7 @@ class UsersDeleteTest extends TestCase
             ->assertOk();
     }
 
-    public function test_unauthorized_delete_region()
+    public function test_unauthorized_delete_user()
     {
         $this
             ->delete(route('users.destroy', $this->appUser))

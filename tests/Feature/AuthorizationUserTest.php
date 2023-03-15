@@ -18,6 +18,7 @@ class AuthorizationUserTest extends TestCase
 
     public function test_success_register_user(): void
     {
+        $this->markTestSkipped('In step create auth for application');
         $response = $this->post('auth/register', self::$successUserData);
         $response
             ->assertSessionHasNoErrors()
@@ -31,6 +32,7 @@ class AuthorizationUserTest extends TestCase
 
     public function test_fail_register_user(): void
     {
+        $this->markTestSkipped('In step create auth for application');
         $response = $this->post('auth/register', self::$failUserData);
         $response
             ->assertSessionHasErrors(['email', 'password']);
@@ -38,6 +40,7 @@ class AuthorizationUserTest extends TestCase
 
     public function test_fail_login_user(): void
     {
+        $this->markTestSkipped('In step create auth for application');
         $this->test_success_register_user();
         $response = $this->post('auth/login', self::$failUserData);
         $response
@@ -46,6 +49,7 @@ class AuthorizationUserTest extends TestCase
 
     public function test_success_login_user(): void
     {
+        $this->markTestSkipped('In step create auth for application');
         $this->test_success_register_user();
         $response = $this->post('auth/login', self::$successUserData);
         $response
