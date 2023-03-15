@@ -12,5 +12,5 @@ interface UserServiceContract
     public function deleteMany(array $ids): bool;
     public function delete(int $id): bool;
     public function update(UserDto $userDto, int $id): bool;
-    public function setProcessEmail(string $token): void;
+    public function setProcessEmail(string $token): bool;
 }

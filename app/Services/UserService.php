@@ -49,9 +49,21 @@ class UserService implements UserServiceContract
         return $user->save();
     }
 
-    public function setProcessEmail(string $token): void
+    public function setProcessEmail(string $token): bool
     {
-        //TODO;
+        $user = $this->userRepository->where([
+            'process_token' => $token,
+            ['process_email_expire_at', '>=', now()->format('Y-m-d H:i:s')]
+        ])->first();
+        if ($user) {
+            return DB::transaction(function () use ($user) {
+                $user->process_email_expire_at = null;
+                $user->process_token = null;
+                $user->email = $user->email_from_process;
+                return $user->save();
+            });
+        }
+        return false;
     }
 
     private function startProcess(UserDto $userDto, User $user): void

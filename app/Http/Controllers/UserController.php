@@ -9,7 +9,9 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Services\Contracts\UserServiceContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -64,9 +66,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function changeEmail(Request $request, string $token)
+    public function changeEmail(Request $request, string $token): RedirectResponse
     {
-        $this->userService->setProcessEmail($token);
+        if ($this->userService->setProcessEmail($token)) {
+            Session::flash('alert-success', __('Process email change completed successfully.'));
+        } else {
+            Session::flash('alert-error', __('Process email change completed wrong.'));
+        }
+
         return redirect()->route('users.index');
     }
 }

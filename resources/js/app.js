@@ -44,6 +44,28 @@
 //     }
 // }
 //
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css"
+
+function toastr() {
+    document.querySelectorAll('[data-flash-message]').forEach((element) => {
+        switch (element.getAttribute('data-flash-message-type')) {
+            case 'success' :
+                iziToast.success({
+                    message: element.getAttribute('data-flash-message-content'),
+                    position: 'topRight'
+                });
+                break;
+            case 'error' :
+                iziToast.error({
+                    message: element.getAttribute('data-flash-message-content'),
+                    position: 'topRight'
+                });
+                break;
+        }
+
+    })
+}
 
 function select2Ajax() {
     $('[data-ajax-select2]').each(function(){
@@ -129,4 +151,5 @@ $(document).ready(function() {
     clearSelect2();
     toggleBulkActions();
     toggleSwitcher();
+    toastr();
 });
