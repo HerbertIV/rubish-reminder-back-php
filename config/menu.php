@@ -10,7 +10,7 @@ return [
     [
         'href' => [
             [
-                'href' => 'user.index',
+                'href' => 'users.index',
                 'text' => 'menu.user.index',
                 'icon' => 'fa fa-users',
             ],

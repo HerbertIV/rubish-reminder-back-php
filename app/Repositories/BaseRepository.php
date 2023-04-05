@@ -2,11 +2,15 @@
 
 namespace App\Repositories;
 
+use App\Events\CreateModelEvent;
+use App\Events\Regions\RegionCreateEvent;
+use App\Repositories\Contracts\BaseRepositoryContract;
 use Exception;
 use Illuminate\Container\Container as Application;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseRepository
+abstract class BaseRepository implements BaseRepositoryContract
 {
     /**
      * @var Model
@@ -34,7 +38,7 @@ abstract class BaseRepository
      *
      * @return string
      */
-    abstract public function model();
+    abstract public function model(): string;
 
     /**
      * Make Model instance
@@ -55,4 +59,18 @@ abstract class BaseRepository
         return $this->model = $model;
     }
 
+    public function query(): Builder
+    {
+        return $this->model->newQuery();
+    }
+
+    public function where(array $params): Builder
+    {
+        return $this->query()->where($params);
+    }
+
+    public function whereIn(string $column, array $values): Builder
+    {
+        return $this->query()->whereIn($column, $values);
+    }
 }
