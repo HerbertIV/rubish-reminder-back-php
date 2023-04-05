@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Web\Users;
 
-use App\Events\ProcessUserEmailChangeEvent;
-use App\Events\ProcessUserPhoneChangeEvent;
-use App\Http\Livewire\RegionForm;
+use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
+use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Http\Livewire\UserForm;
-use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Event;
@@ -32,8 +30,8 @@ class UsersUpdateTest extends TestCase
             ->get(route('users.edit', $this->appUser))
             ->assertOk();
 
-        $this->view('pages.region.edit', ['user' => $this->appUser])
-            ->assertSee(__('Edit user'))
+        $this->view('pages.user.edit', ['user' => $this->appUser])
+            ->assertSee(__('Edit User'))
             ->assertSee(__('First name'))
             ->assertSee(__('Last name'))
             ->assertSee(__('Email'))
@@ -102,12 +100,12 @@ class UsersUpdateTest extends TestCase
 
         Livewire::test(UserForm::class, [
             'action' => 'updateUser',
-            'region' => $this->appUser
+            'user' => $this->appUser
         ])
             ->set('email', 'test@example.com')
             ->set('phone', '123123132')
-            ->set('first_name', 'Test')
-            ->set('last_name', 'Test2')
+            ->set('firstName', 'Test')
+            ->set('lastName', 'Test2')
             ->set('active', 1)
             ->call('updateUser')
             ->assertEmitted('updated');
@@ -127,18 +125,18 @@ class UsersUpdateTest extends TestCase
 
         Livewire::test(UserForm::class, [
             'action' => 'updateUser',
-            'region' => $this->appUser
+            'user' => $this->appUser
         ])
             ->set('email', 'test')
-            ->call('updateRegion')
+            ->call('updateUser')
             ->assertHasErrors(['email' => 'email']);
 
         Livewire::test(UserForm::class, [
             'action' => 'updateUser',
-            'region' => $this->appUser
+            'user' => $this->appUser
         ])
             ->set('email', '')
-            ->call('updateRegion')
+            ->call('updateUser')
             ->assertHasErrors(['email' => 'required']);
     }
 }

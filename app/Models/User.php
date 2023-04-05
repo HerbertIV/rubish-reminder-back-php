@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -28,6 +25,12 @@ class User extends Authenticatable
         'password',
         'phone',
         'active',
+        'email_from_process',
+        'phone_from_process',
+        'process_email_expire_at',
+        'process_phone_expire_at',
+        'process_token',
+        'sms_code',
     ];
 
     /**
@@ -47,6 +50,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'process_email_expire_at' => 'datetime',
+        'process_phone_expire_at' => 'datetime',
         'active' => 'bool',
     ];
 
