@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
+        "laravel/sail": "^1.21",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
@@ -48,12 +48,6 @@
             "Custom\\Core\\Routes\\":                   "packages/custom/core/routes/src/",
             "Custom\\Core\\Resource\\":                 "packages/custom/core/resource/src/",
             "Custom\\Core\\Logic\\":                    "packages/custom/core/logic/src/",
-
-            "Custom\\Fields\\Resource\\":               "packages/custom/fields/resource/src/",
-            "Custom\\Fields\\Logic\\":                  "packages/custom/fields/logic/src/",
-
-            "Custom\\Forms\\Resource\\":                "packages/custom/forms/resource/src/",
-            "Custom\\Forms\\Logic\\":                   "packages/custom/forms/logic/src/",
 
             "Database\\Factories\\":                    "database/factories/",
             "Database\\Seeders\\":                      "database/seeders/"

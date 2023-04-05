@@ -29,7 +29,7 @@ class TemplateSeeder extends Seeder
             [
                 'event_name' => ProcessUserEmailChangeEvent::class,
                 'subject' => 'Process changing email for user is start',
-                'content' => 'Process changing email for user is start',
+                'content' => 'Process changing email in @VarAppName for user is start @VarProcessUrl',
             ],
         ];
         DB::transaction(function () use ($templates) {
