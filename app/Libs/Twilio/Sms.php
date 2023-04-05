@@ -13,10 +13,8 @@ class Sms extends Twilio
             $this->client->messages->create(
                 $to,
                 [
-                    "body" => $message,
-                    "from" => env('TWILIO_NUMBER')
-                    //   On US phone numbers, you could send an image as well!
-                    //  'mediaUrl' => $imageUrl
+                    'body' => $message,
+                    'from' => env('TWILIO_NUMBER')
                 ]
             );
             Log::channel('sms')->info('Message sent to ' . $to);
