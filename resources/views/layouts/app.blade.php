@@ -31,11 +31,13 @@
         <!-- Scripts -->
         <script defer src="{{ asset('vendor/alpine.js') }}"></script>
     </head>
-    <body class="antialiased">
+    <body class="antialiased {{ \Illuminate\Support\Facades\Auth::check() ? '' : 'sidebar-mini' }}">
         <div id="app">
             <div class="main-wrapper">
+                @if (\Illuminate\Support\Facades\Auth::check())
+                    @include('components.sidebar')
+                @endif
                 @include('components.navbar')
-                @include('components.sidebar')
 
                 <!-- Main Content -->
                 <div class="main-content">

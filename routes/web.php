@@ -20,7 +20,8 @@ Route::get('/', function () {
 });
 Route::group(['prefix' => '/users/process'], function () {
     Route::get('/change-email/{token}', [UserController::class, 'changeEmail'])->name('user.process.email');
-    Route::get('/change-phone', [UserController::class, 'changePhone'])->name('user.process.phone');
+    Route::get('/change-phone/{token}', [UserController::class, 'changePhone'])->name('user.process.phone');
+    Route::post('/change-phone/{token}', [UserController::class, 'smsCodeVerify'])->name('user.sms-code.verify');
 });
 
 

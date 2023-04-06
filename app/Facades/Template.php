@@ -7,7 +7,7 @@ use App\Services\Contracts\TemplateEventServiceContract;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static            void register(string $eventClass, string $variableClass)
+ * @method static            void register(string $eventClass, string $variableClass, string $channel)
  * @method static            void handleEvent(EventWrapper $event)
  * @method static         ?string getVariableClassName(string $eventClass, string $channelClass)
  * @method static           array getRegisteredEvents()

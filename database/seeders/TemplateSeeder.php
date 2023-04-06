@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
+use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Models\Template;
 use Illuminate\Database\Seeder;
@@ -24,12 +25,17 @@ class TemplateSeeder extends Seeder
             [
                 'event_name' => ProcessUserPhoneChangeEvent::class,
                 'subject' => 'Process changing phone for user is start',
-                'content' => 'Process changing phone for user is start',
+                'content' => 'Process changing phone @VarAppName for user is start @VarProcessUrl and check @VarSmsCode',
             ],
             [
                 'event_name' => ProcessUserEmailChangeEvent::class,
                 'subject' => 'Process changing email for user is start',
                 'content' => 'Process changing email in @VarAppName for user is start @VarProcessUrl',
+            ],
+            [
+                'event_name' => ProcessUserPhoneChangeEmailSendEvent::class,
+                'subject' => 'Process changing phone for user is start',
+                'content' => 'Process changing phone in @VarAppName for user is start @VarProcessUrl',
             ],
         ];
         DB::transaction(function () use ($templates) {

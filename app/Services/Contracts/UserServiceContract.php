@@ -13,4 +13,5 @@ interface UserServiceContract
     public function delete(int $id): bool;
     public function update(UserDto $userDto, int $id): bool;
     public function setProcessEmail(string $token): bool;
+    public function setProcessPhone(?string $token, ?int $smsCode): bool;
 }

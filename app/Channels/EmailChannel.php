@@ -2,12 +2,13 @@
 
 namespace App\Channels;
 
+use App\Channels\Contracts\NotificationChannelContract;
 use App\Events\Templates\EventWrapper;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class EmailChannel
+class EmailChannel implements NotificationChannelContract
 {
     public static function send(EventWrapper $event, array $sections): bool
     {
