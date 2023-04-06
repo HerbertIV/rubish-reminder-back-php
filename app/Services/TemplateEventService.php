@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Channels\Contracts\NotificationChannelContract;
 use App\Channels\EmailChannel;
+use App\Channels\SmsChannel;
 use App\Events\Templates\EventWrapper;
 use App\Helpers\StringHelper;
 use App\Models\Template;
@@ -37,7 +39,7 @@ class TemplateEventService implements TemplateEventServiceContract
             return;
         }
         //TODO add sms twilio send process
-        $variableClass = $this->events[$event->eventClass()];
+        $variableClass = reset($this->events[$event->eventClass()]);
         $template = $this->getTemplateForEvent($event, $variableClass);
         if (! $template) {
             Log::error(
@@ -52,8 +54,11 @@ class TemplateEventService implements TemplateEventServiceContract
         }
         $variables = $variableClass::variablesFromEvent($event);
         $sections = $this->generateContent($template, $variables);
-
-        EmailChannel::send($event, $sections);
+        if (
+            is_a(key($this->events[$event->eventClass()]), NotificationChannelContract::class, true)
+        ) {
+            key($this->events[$event->eventClass()])::send($event, $sections);
+        }
     }
 
     public function __construct(

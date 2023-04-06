@@ -76,4 +76,9 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function changePhone(Request $request, string $token): View
+    {
+        return view('pages.user.phone-process', ['token' => $token]);
+    }
 }

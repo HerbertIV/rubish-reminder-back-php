@@ -44,7 +44,9 @@ class UserService implements UserServiceContract
     public function update(UserDto $userDto, int $id): bool
     {
         $user = $this->first($id);
-        $user->fillable($userDto->toArray());
+        $userData = $userDto->toArray();
+        unset($userData['email']);
+        $user->fill($userData);
         $this->startProcess($userDto, $user);
         return $user->save();
     }
@@ -59,7 +61,29 @@ class UserService implements UserServiceContract
             return DB::transaction(function () use ($user) {
                 $user->process_email_expire_at = null;
                 $user->process_token = null;
+                $user->process_phone_expire_at = null;
+                $user->sms_code = null;
                 $user->email = $user->email_from_process;
+                return $user->save();
+            });
+        }
+        return false;
+    }
+
+    public function setProcessPhone(?string $token, ?int $smsCode): bool
+    {
+        $user = $this->userRepository->where([
+            'process_token' => $token,
+            'sms_code' => $smsCode,
+            ['process_phone_expire_at', '>=', now()->format('Y-m-d H:i:s')]
+        ])->first();
+        if ($user) {
+            return DB::transaction(function () use ($user) {
+                $user->process_email_expire_at = null;
+                $user->process_phone_expire_at = null;
+                $user->process_token = null;
+                $user->sms_code = null;
+                $user->phone = $user->phone_from_process;
                 return $user->save();
             });
         }
@@ -81,6 +105,7 @@ class UserService implements UserServiceContract
             );
             $user->phone_from_process = $userDto->getPhone();
             $user->sms_code = random_int(100000, 999999);
+            $user->process_token = md5(microtime());
         }
     }
 }

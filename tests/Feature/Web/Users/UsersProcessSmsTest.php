@@ -4,8 +4,10 @@ namespace Tests\Feature\Web\Users;
 
 use App\Channels\EmailMailable;
 use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
+use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Http\Livewire\UserForm;
+use App\Http\Livewire\UserPhoneProcessForm;
 use App\Listeners\TemplateListener;
 use App\Models\Template;
 use App\Models\User;
@@ -44,7 +46,7 @@ class UsersProcessSmsTest extends TestCase
             ->call('updateUser')
             ->assertOk();
         $this->appUser->refresh();
-        $this->assertTrue($this->appUser->phone_from_process === 'test@test.pl');
+        $this->assertTrue($this->appUser->phone_from_process === '123456789');
         $this->assertTrue((bool)$this->appUser->process_phone_expire_at);
         Event::assertDispatched(ProcessUserPhoneChangeEvent::class);
 
@@ -53,7 +55,10 @@ class UsersProcessSmsTest extends TestCase
 
     public function test_change_email_after_process()
     {
-        Event::fake([ProcessUserPhoneChangeEvent::class]);
+        Event::fake([
+            ProcessUserPhoneChangeEvent::class,
+            ProcessUserPhoneChangeEmailSendEvent::class
+        ]);
         Mail::fake();
         $this->actingAs($this->user);
 
@@ -65,11 +70,35 @@ class UsersProcessSmsTest extends TestCase
             ->call('updateUser')
             ->assertOk();
         $this->appUser->refresh();
-        $this->assertTrue($this->appUser->phone_from_process === 'test@test.pl');
+        $this->assertTrue($this->appUser->phone_from_process === '123456789');
         $this->assertTrue((bool)$this->appUser->process_phone_expire_at);
         Event::assertDispatched(ProcessUserPhoneChangeEvent::class);
+        Event::assertDispatched(ProcessUserPhoneChangeEmailSendEvent::class);
 
         $listener = app(TemplateListener::class);
-        $listener->handle(new ProcessUserPhoneChangeEvent($this->appUser));
+        $listener->handle(new ProcessUserPhoneChangeEmailSendEvent($this->appUser));
+
+        Mail::assertSent(EmailMailable::class, function (EmailMailable $mailable) {
+            $this->assertEquals($this->mailTemplate->subject, $mailable->subject);
+            $this->assertTrue($mailable->hasTo($this->appUser->email));
+
+            return true;
+        });
+
+        $this
+            ->get(route('user.process.phone', ['token' => $this->appUser->process_token]))
+            ->assertOk();
+        Livewire::test(UserPhoneProcessForm::class, [
+            'action' => 'userPhoneProcessVerify',
+            'token' => $this->appUser->process_token
+        ])
+            ->set('smsCode', $this->appUser->sms_code)
+            ->call('userPhoneProcessVerify')
+            ->assertOk();
+        $this->appUser->refresh();
+        $this->assertTrue($this->appUser->phone === $this->appUser->phone_from_process);
+        $this->assertTrue(!$this->appUser->process_email_expire_at);
+        $this->assertTrue(!$this->appUser->process_token);
+        $this->assertTrue(!$this->appUser->sms_code);
     }
 }

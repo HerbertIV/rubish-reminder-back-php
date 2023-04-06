@@ -3,6 +3,7 @@
 namespace Tests\Feature\Web\Users;
 
 use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
+use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Http\Livewire\UserForm;
 use App\Models\User;
@@ -51,33 +52,44 @@ class UsersUpdateTest extends TestCase
 
     public function test_success_update_user()
     {
-        Event::fake();
-        $user = User::factory()->make()->toArray();
-        $this->assertTrue($this->appUser->first_name !== $user['first_name']);
-        $this->assertTrue($this->appUser->last_name !== $user['last_name']);
-        $this->assertTrue($this->appUser->phone !== $user['phone']);
-        $this->assertTrue($this->appUser->email !== $user['email']);
-
+        Event::fake([
+            ProcessUserEmailChangeEvent::class,
+            ProcessUserPhoneChangeEvent::class,
+            ProcessUserPhoneChangeEmailSendEvent::class
+        ]);
+        $user = User::factory()->make();
+        $userData = [
+            'firstName' => $user->first_name,
+            'lastName' => $user->last_name,
+            'phone' => $user->phone,
+            'email' => $user->email,
+            'active' => $user->active,
+        ];
+        $this->assertTrue($this->appUser->first_name !== $userData['firstName']);
+        $this->assertTrue($this->appUser->last_name !== $userData['lastName']);
+        $this->assertTrue($this->appUser->phone !== $userData['phone']);
+        $this->assertTrue($this->appUser->email !== $userData['email']);
         $this
             ->actingAs($this->user)
-            ->put(route('users.update', $this->appUser), $user)
+            ->put(route('users.update', $this->appUser), $userData)
             ->assertOk()
             ->assertJsonFragment(['success' => true]);
         $this->appUser->refresh();
-        $this->assertTrue($this->appUser->first_name === $user['first_name']);
-        $this->assertTrue($this->appUser->last_name === $user['last_name']);
-        $this->assertTrue($this->appUser->phone !== $user['phone']);
-        $this->assertTrue($this->appUser->email !== $user['email']);
+        $this->assertTrue($this->appUser->first_name === $userData['firstName']);
+        $this->assertTrue($this->appUser->last_name === $userData['lastName']);
+        $this->assertTrue($this->appUser->phone !== $userData['phone']);
+        $this->assertTrue($this->appUser->email !== $userData['email']);
 
         Event::assertDispatched(ProcessUserEmailChangeEvent::class);
         Event::assertDispatched(ProcessUserPhoneChangeEvent::class);
+        Event::assertDispatched(ProcessUserPhoneChangeEmailSendEvent::class);
     }
 
     public function test_unauthorized_update_user()
     {
         $user = User::factory()->make()->toArray();
         $this
-            ->put(route('users.update', $this->user), $user)
+            ->put(route('users.update', $this->appUser), $user)
             ->assertStatus(JsonResponse::HTTP_FOUND)
             ->assertRedirect(route('login'));
     }
@@ -86,16 +98,21 @@ class UsersUpdateTest extends TestCase
     {
         $this
             ->actingAs($this->user)
-            ->put(route('users.update', $this->user), ['email' => ''])
+            ->put(route('users.update', $this->appUser), ['email' => ''])
             ->assertSessionHasErrors(['email']);
         $this
             ->actingAs($this->user)
-            ->put(route('users.update', $this->user), ['email' => 'aaaa'])
+            ->put(route('users.update', $this->appUser), ['email' => 'aaaa'])
             ->assertSessionHasErrors(['email']);
     }
 
     public function test_livewire_update()
     {
+        Event::fake([
+            ProcessUserEmailChangeEvent::class,
+            ProcessUserPhoneChangeEvent::class,
+            ProcessUserPhoneChangeEmailSendEvent::class
+        ]);
         $this->actingAs($this->user);
 
         Livewire::test(UserForm::class, [
@@ -117,6 +134,7 @@ class UsersUpdateTest extends TestCase
 
         Event::assertDispatched(ProcessUserEmailChangeEvent::class);
         Event::assertDispatched(ProcessUserPhoneChangeEvent::class);
+        Event::assertDispatched(ProcessUserPhoneChangeEmailSendEvent::class);
     }
 
     public function test_validated_inputs_livewire_update()
