@@ -35,7 +35,7 @@ class RegionForm extends Component
 
     public function selectedCompanyItem($item)
     {
-        $this->parentId = $item;
+        $this->parentId = (int)$item;
     }
 
     protected function getRules()

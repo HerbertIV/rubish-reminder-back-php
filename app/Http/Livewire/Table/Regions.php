@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Table;
 use App\Models\Region;
 use App\Services\Contracts\RegionServiceContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
@@ -31,10 +32,11 @@ class Regions extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('Parent', 'parent_id')
-                ->sortable(),
             Column::make('Name')
                 ->sortable(),
+            LinkColumn::make('Parent', 'parent_id') // make() has no effect in this case but needs to be set anyway
+                ->title(fn ($row) => $row->parent->name ?? '')
+                ->location(fn ($row) => $row->parent ? route('regions.show', ['region' => $row->parent]) : ''),
             ButtonGroupColumn::make('Actions')
                 ->attributes(function($row) {
                     return [
@@ -43,16 +45,16 @@ class Regions extends DataTableComponent
                 })
                 ->buttons([
                     LinkColumn::make('View') // make() has no effect in this case but needs to be set anyway
-                    ->title(fn($row) => 'View')
-                        ->location(fn($row) => route('regions.show', ['region' => $row]))
+                    ->title(fn ($row) => 'View')
+                        ->location(fn ($row) => route('regions.show', ['region' => $row]))
                         ->attributes(function($row) {
                             return [
                                 'class' => 'underline text-blue-500 hover:no-underline',
                             ];
                         }),
                     LinkColumn::make('Edit')
-                        ->title(fn($row) => 'Edit')
-                        ->location(fn($row) => route('regions.edit', ['region' => $row]))
+                        ->title(fn ($row) => 'Edit')
+                        ->location(fn ($row) => route('regions.edit', ['region' => $row]))
                         ->attributes(function($row) {
                             return [
                                 'target' => '_blank',
@@ -76,9 +78,14 @@ class Regions extends DataTableComponent
         $this->clearSelected();
     }
 
-    public function query(): Builder
+    public function builder(): Builder
     {
-        return Region::query();
+        return Region::query()
+            ->select([
+                'id',
+                'name',
+                'parent_id',
+            ]);
     }
 
 }
