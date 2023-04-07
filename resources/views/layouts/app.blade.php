@@ -74,7 +74,6 @@
         <script defer src="{{ asset('vendor/select2/select2.min.js') }}"></script>
         <script src="{{ asset('stisla/js/stisla.js') }}"></script>
         <script src="{{ asset('stisla/js/scripts.js') }}"></script>
-
         <livewire:scripts />
          <script src="{{ asset('js/app.js') }}" defer></script>
         @vite(['resources/js/app.js'])

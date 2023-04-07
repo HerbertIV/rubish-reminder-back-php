@@ -8,6 +8,8 @@ use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\RegionRepository;
 use App\Repositories\TemplateRepository;
 use App\Repositories\UserRepository;
+use App\Services\Contracts\ScheduleServiceContract;
+use App\Services\ScheduleService;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoriesServiceProvider extends ServiceProvider
@@ -16,5 +18,6 @@ class RepositoriesServiceProvider extends ServiceProvider
         RegionRepositoryContract::class => RegionRepository::class,
         UserRepositoryContract::class => UserRepository::class,
         TemplateRepositoryContract::class => TemplateRepository::class,
+        ScheduleServiceContract::class => ScheduleService::class,
     ];
 }
