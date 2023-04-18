@@ -19,3 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('regions', \App\Http\Controllers\RegionController::class);
+
+Route::get('test', function () {
+    $scheduleService = app(\App\Services\Contracts\ScheduleServiceContract::class);
+    $scheduleService->reminderSchedule();
+});

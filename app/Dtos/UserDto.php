@@ -8,6 +8,7 @@ class UserDto extends BaseDto
     protected string $phone;
     protected ?string $firstName;
     protected ?string $lastName;
+    protected ?int $regionId;
     protected bool $active;
 
     /**
@@ -51,6 +52,14 @@ class UserDto extends BaseDto
     }
 
     /**
+     * @return int|null
+     */
+    public function getRegionId(): ?int
+    {
+        return $this->regionId ?? null;
+    }
+
+    /**
      * @return bool
      */
     public function isActive(): bool
@@ -65,6 +74,7 @@ class UserDto extends BaseDto
             'last_name' => $this->getLastName(),
             'active' => $this->isActive(),
             'email' => $this->getEmail(),
+            'region_id' => $this->getRegionId(),
         ];
     }
 
@@ -98,5 +108,13 @@ class UserDto extends BaseDto
     protected function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    /**
+     * @param int $regionId
+     */
+    protected function setRegionId(int $regionId): void
+    {
+        $this->regionId = $regionId;
     }
 }

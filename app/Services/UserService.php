@@ -7,6 +7,7 @@ use App\Enums\ProcessUserDataChangeEnums;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\Contracts\UserServiceContract;
+use App\Traits\RelationsTrait;
 use Illuminate\Support\Facades\DB;
 
 class UserService implements UserServiceContract

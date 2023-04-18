@@ -12,4 +12,14 @@ abstract class BaseDto
     {
         $this->setterByData($data);
     }
+
+    protected function setRelations(array $relations): void
+    {
+        $this->relations = $relations;
+    }
+
+    public function getRelations(): array
+    {
+        return $this->relations ?? [];
+    }
 }

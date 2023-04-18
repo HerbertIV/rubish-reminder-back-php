@@ -39,6 +39,9 @@ class Users extends DataTableComponent
                 ->sortable(),
             Column::make(__('Phone'), 'phone')
                 ->sortable(),
+            LinkColumn::make(__('Region'), 'region_id') // make() has no effect in this case but needs to be set anyway
+                ->title(fn (User $row) => $row->region->name ?? '')
+                ->location(fn (User $row) => $row->region ? route('regions.show', ['region' => $row->region]) : ''),
             Column::make(__('Active'))
                 ->sortable(),
             ButtonGroupColumn::make('Actions')
@@ -82,9 +85,16 @@ class Users extends DataTableComponent
         $this->clearSelected();
     }
 
-    public function query(): Builder
+    public function builder(): Builder
     {
-        return User::query();
+        return User::query()->select([
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'region_id',
+        ]);
     }
 
 }
