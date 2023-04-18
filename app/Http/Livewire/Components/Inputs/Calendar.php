@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Livewire\Components\Inputs;
 
@@ -6,25 +7,35 @@ use Livewire\Component;
 
 class Calendar extends Component
 {
-    public $events = [];
+    public array $events = [];
 
-    public $createModal = false;
-    public $title = '';
-    public $start_date = '';
-    public $end_date = '';
-    public $description = '';
+    public bool $createModal = false;
+    public bool $dropModal = false;
+    public string $title = '';
+    public string $startDate = '';
+    public string $endDate = '';
+    public string $description = '';
+    public $eventId = null;
+    public string $formTemplate = '';
+    public array $properties = [];
+    public string $action;
 
     protected $rules = [
-        'title' => 'required',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after:start_date',
-        'description' => 'nullable',
+        'title' => 'required|string',
+        'startDate' => 'required|date',
+        'endDate' => 'required|date|after:startDate',
+        'description' => 'nullable|string',
     ];
 
-    protected $listeners = ['showCreateModal' => 'showCreateModal'];
+    protected $listeners = [
+        'showCreateModal' => 'showCreateModal',
+        'showDropEventModal' => 'showDropEventModal',
+    ];
 
-    public function mount()
-    {
+    public function mount(
+        string $formTemplate
+    ) {
+        $this->formTemplate = $formTemplate;
         $this->events = [];
     }
 
@@ -33,29 +44,46 @@ class Calendar extends Component
         return view('livewire.components.inputs.calendar');
     }
 
-    public function loadEvents($start, $end)
+    public function loadEvents(string $start, string $end): array
     {
         $events = collect();
-        $this->events = $events->toArray();
+        return $events->toArray();
     }
 
     public function showCreateModal($date)
     {
         $this->resetValidation();
         $this->createModal = true;
-        $this->start_date = $date;
-        $this->end_date = $date;
+        $this->startDate = $date;
+        $this->endDate = $date;
     }
 
-    public function hideCreateModal()
+    public function showDropEventModal($id)
+    {
+        $this->dropModal = true;
+        $this->eventId = $id;
+    }
+
+    public function closeModal()
     {
         $this->createModal = false;
+        $this->dropModal = false;
         $this->resetValidation();
     }
 
     public function createEvent()
     {
-        dd('sss');
+        //
+    }
+
+    public function dropEvent()
+    {
+        //
+    }
+
+    public function getPreviewDate()
+    {
+        return implode(',', [$this->startDate, $this->endDate]);
     }
 }
 

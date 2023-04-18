@@ -9,7 +9,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="fc-overflow">
-                        <livewire:components.inputs.calendar />
+                        <livewire:schedule-calendar
+                            action="createEvent"
+                            formTemplate="pages.schedule.components.modal-form"/>
                     </div>
                 </div>
             </div>

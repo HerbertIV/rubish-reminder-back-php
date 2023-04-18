@@ -31,7 +31,7 @@ Route::group([ "middleware" => ['auth:sanctum', config('jetstream.auth_session')
 
     Route::resource('/regions', RegionController::class);
     Route::resource('/users', UserController::class);
-    Route::get('/schedules', [ScheduleController::class, 'index']);
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
 
     require 'async.php';
 });

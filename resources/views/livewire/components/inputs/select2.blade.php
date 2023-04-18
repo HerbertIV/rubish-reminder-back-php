@@ -1,4 +1,8 @@
-<div class="form-group {{ $isMultiple ? 'multi' : 'single' }} col-span-6 sm:col-span-5" data-error-border="{{ $name }}">
+<div
+    class="form-group {{ $isMultiple ? 'multi' : 'single' }} col-span-6 sm:col-span-5"
+    data-error-border="{{ $name }}"
+    wire:ignore
+>
     <label>{{ $label }}</label>
     <select id="{{ $name }}"
             @if ($isMultiple)
@@ -10,6 +14,8 @@
             @if ($isAjax)
             data-ajax-select2
             data-ajax-select2-url="{{ $url }}"
+            @else
+            data-sync-select2
             @endif
             @if ($isCustomTemp)
             data-custom-temp="true"
@@ -20,6 +26,7 @@
             "
             data-searching-text="{{ __('search.search_in_progress') }}"
             data-no-result-found-text="{{ __('search.not_result_found') }}"
+            style="width: 100%"
     >
         @if (!$isAjax)
             <option value="">{{ __('action.select') }}</option>
