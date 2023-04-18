@@ -19,6 +19,11 @@ return [
                 'text' => 'menu.region.index',
                 'icon' => 'fa fa-map-marker',
             ],
+            [
+                'href' => 'schedules.index',
+                'text' => 'menu.schedules.index',
+                'icon' => 'fa fa-calendar',
+            ],
 //            [
 //                'section_text' => 'menu.settings.ecard',
 //                'icon' => 'pocztowki',

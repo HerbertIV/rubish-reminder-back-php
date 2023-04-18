@@ -1,49 +1,3 @@
-// import './bootstrap';
-// import '../css/app.css';
-// import '../css/tailwind.css';
-// function dataTableController (id) {
-//     return {
-//         id,
-//         deleteItem() {
-//             Swal.fire({
-//                 title: 'Are you sure?',
-//                 text: "You won't be able to revert this!",
-//                 icon: 'warning',
-//                 showCancelButton: true,
-//                 confirmButtonColor: '#3085d6',
-//                 cancelButtonColor: '#d33',
-//                 confirmButtonText: 'Yes, delete it!'
-//             }).then((result) => {
-//                 if (result.isConfirmed) {
-//                     Livewire.emit('deleteItem', this.id);
-//                 }
-//             })
-//         }
-//     }
-// }
-//
-// function dataTableMainController () {
-//     return {
-//         setCallback() {
-//             Livewire.on('deleteResult', (result) => {
-//                 if (result.status) {
-//                     Swal.fire(
-//                         'Deleted!',
-//                         result.message,
-//                         'success'
-//                     );
-//                 } else {
-//                     Swal.fire(
-//                         'Error!',
-//                         result.message,
-//                         'error'
-//                     );
-//                 }
-//             });
-//         }
-//     }
-// }
-//
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css"
 
@@ -112,7 +66,7 @@ function select2Ajax() {
             })).trigger('change');
         }
         $(this).on('change', function (e) {
-            livewire.emit('selectedCompanyItem', e.target.value)
+            livewire.emit('selectedCompanyItem', e.target.name, e.target.value)
         });
         window.livewire.on('select2',()=>{
             initSelectCompanyDrop();
@@ -120,10 +74,28 @@ function select2Ajax() {
     });
 }
 
-function toggleSwitcher()
+function select2InitEvents()
 {
-    $(document).on('change', '[data-switcher]', (e) => {
-        livewire.emit('toggleSwitcher', e.target.name, e.target.checked)
+    $('[data-sync-select2]').each(function(){
+        let select2Conf = {
+            language: {
+                searching: function() {
+                    return searchingText;
+                },
+                "noResults": function(){
+                    return noResultFoundText;
+                }
+            },
+            templateResult: formatRepo,
+            templateSelection: formatRepo
+        };
+        $(this).select2(select2Conf);
+        $(this).on('change', function (e) {
+            livewire.emit('selectedCompanyItem', e.target.name, e.target.value)
+        });
+        window.livewire.on('select2',() =>{
+            initSelectCompanyDrop();
+        });
     });
 }
 
@@ -134,6 +106,12 @@ function clearSelect2()
     });
 }
 
+function toggleSwitcher()
+{
+    $(document).on('change', '[data-switcher]', (e) => {
+        livewire.emit('toggleSwitcher', e.target.name, e.target.checked)
+    });
+}
 
 function formatRepo(repo) {
     return repo.template ? $(repo.template) : repo.text;
@@ -152,4 +130,12 @@ $(document).ready(function() {
     toggleBulkActions();
     toggleSwitcher();
     toastr();
+    // new ScheduleCalendar('schedule');
+});
+
+Livewire.hook('component.initialized', function (component) {
+    if (component.el.querySelector('[data-ajax-select2]')) {
+        select2Ajax();
+        clearSelect2();
+    }
 });

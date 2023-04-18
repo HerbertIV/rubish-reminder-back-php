@@ -7,4 +7,7 @@ return [
     'region' => [
         'index' => 'Regions list'
     ],
+    'schedules' => [
+        'index' => 'Schedules'
+    ],
 ];

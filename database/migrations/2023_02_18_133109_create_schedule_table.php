@@ -16,19 +16,14 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->timestamp('execute_datetime');
-            $table->timestamps();
-        });
-        Schema::create('schedule_place', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('schedule_id')->unsigned();
             $table->string('garbage_type');
             $table->morphs('placeable');
             $table->timestamps();
 
-            $table->foreign(
-                'schedule_id',
-                'fk-schedule_place-schedule_id-schedules-id'
-            )->on('schedules')->references('id')->restrictOnDelete();
+            $table->unique(
+                ['placeable_id', 'placeable_type', 'garbage_type', 'execute_datetime'],
+                'idx-placeable_id-placeable_type-garbage_type-execute_datetime-schedules-unique'
+            );
         });
     }
 
@@ -40,6 +35,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('schedules');
-        Schema::dropIfExists('schedule_place');
     }
 };

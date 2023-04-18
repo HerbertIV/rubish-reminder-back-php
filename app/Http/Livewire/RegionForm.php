@@ -33,9 +33,9 @@ class RegionForm extends Component
         'RegionCreateEvent'
     ];
 
-    public function selectedCompanyItem($item)
+    public function selectedCompanyItem($name, $item)
     {
-        $this->parentId = (int)$item;
+        $this->$name = (int)$item;
     }
 
     protected function getRules()
