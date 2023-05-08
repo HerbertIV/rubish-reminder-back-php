@@ -1,5 +1,5 @@
-<div >
-    <div wire:ignore>
+<div>
+    <div >
         <div id="schedule"></div>
     </div>
     @include('livewire.components.inputs.calendar_components.modal')
@@ -15,9 +15,9 @@
             events: @json($events),
             eventsSources: {
                 events: @json($this->loadEvents(
-                    \Illuminate\Support\Carbon::now()->firstOfYear()->format('Y-m-d'),
-                    \Illuminate\Support\Carbon::now()->lastOfYear()->format('Y-m-d')
-                ))
+                \Illuminate\Support\Carbon::now()->firstOfYear()->format('Y-m-d'),
+                \Illuminate\Support\Carbon::now()->lastOfYear()->format('Y-m-d')
+            ))
             },
             eventClick: function (info) {
                 Livewire.emit('showDropEventModal', info.event.id);
@@ -44,6 +44,9 @@
         });
         Livewire.on('refreshFullCalendar', function () {
             calendar.refetchEvents();
+        });
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            calendar.updateSize();
         });
     });
 </script>

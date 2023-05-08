@@ -70,9 +70,13 @@ class ScheduleService implements ScheduleServiceContract
     private function smsSend(Collection $schedules): void
     {
         foreach ($schedules as $schedule) {
-            dd($schedule->placeable);
             /* @var Schedule $schedule */
-            event(new SmsReminderEventEvent($schedule->placeable));
+            foreach ($schedule->placeable->users as $user) {
+                event(new SmsReminderEventEvent(
+                    $user,
+                    $schedule
+                ));
+            }
         }
     }
 

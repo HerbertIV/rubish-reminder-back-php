@@ -24,4 +24,9 @@ abstract class CommonReminderEventEvent
     {
         return $this->user;
     }
+
+    public function getSchedule(): Schedule
+    {
+        return $this->schedule;
+    }
 }
