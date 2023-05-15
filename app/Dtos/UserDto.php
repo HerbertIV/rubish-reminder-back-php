@@ -74,6 +74,7 @@ class UserDto extends BaseDto
             'last_name' => $this->getLastName(),
             'active' => $this->isActive(),
             'email' => $this->getEmail(),
+            'phone' => $this->getPhone(),
             'region_id' => $this->getRegionId(),
         ];
     }

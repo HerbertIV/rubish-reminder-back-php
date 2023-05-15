@@ -46,7 +46,7 @@ class UserService implements UserServiceContract
     {
         $user = $this->first($id);
         $userData = $userDto->toArray();
-        unset($userData['email']);
+        unset($userData['email'], $userData['phone']);
         $user->fill($userData);
         $this->startProcess($userDto, $user);
         return $user->save();

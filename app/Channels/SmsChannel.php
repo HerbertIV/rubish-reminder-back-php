@@ -16,8 +16,8 @@ class SmsChannel implements NotificationChannelContract
             'content' => $sections['content']
         ]);
         // TODO After tests uncomment and remove log
-//        $sms = new Sms();
-//        $sms->send($event->user()->phone, $sections['content']);
+        $sms = new Sms();
+        $sms->send($event->user()->phone, $sections['content']);
         return true;
     }
 }

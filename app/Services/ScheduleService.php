@@ -62,7 +62,7 @@ class ScheduleService implements ScheduleServiceContract
     {
         $schedules = $this->scheduleRepository
             ->query()
-            ->where('execute_datetime', '=', now()->format('Y-m-d'))
+            ->where('execute_datetime', '=', now()->modify('+1 day')->format('Y-m-d'))
             ->get();
         $this->smsSend($schedules);
     }

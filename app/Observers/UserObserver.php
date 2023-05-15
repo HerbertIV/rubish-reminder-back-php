@@ -7,7 +7,7 @@ use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Models\User;
 
-class   UserObserver
+class UserObserver
 {
     public function saved(User $user): void
     {

@@ -71,7 +71,6 @@ class UserForm extends Component
 
         $userDto = new UserDto($this->toArray());
         $user = $this->userService->create($userDto);
-
         $this->emit('saved');
         $this->redirect(route('users.show', $user));
     }
