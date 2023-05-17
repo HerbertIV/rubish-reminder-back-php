@@ -24,6 +24,11 @@ return [
                 'text' => 'menu.schedules.index',
                 'icon' => 'fa fa-calendar',
             ],
+            [
+                'href' => 'templates.index',
+                'text' => 'menu.templates.index',
+                'icon' => 'fa fa-sticky-note-o',
+            ],
 //            [
 //                'section_text' => 'menu.settings.ecard',
 //                'icon' => 'pocztowki',

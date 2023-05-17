@@ -36,6 +36,7 @@ class PermissionEnums extends Enum
     public const CRUD_PERMISSION_GROUP = [
         'user' => self::FULL_ACTIONS,
         'region' => self::FULL_ACTIONS,
+        'template' => self::FULL_ACTIONS,
     ];
 
     public const OTHER_PERMISSIONS = [];

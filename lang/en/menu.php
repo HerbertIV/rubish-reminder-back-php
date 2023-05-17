@@ -10,4 +10,7 @@ return [
     'schedules' => [
         'index' => 'Schedules'
     ],
+    'templates' => [
+        'index' => 'Templates'
+    ],
 ];

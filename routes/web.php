@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::group([ "middleware" => ['auth:sanctum', config('jetstream.auth_session')
     Route::resource('/regions', RegionController::class);
     Route::resource('/users', UserController::class);
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::resource('/templates', TemplateController::class);
 
     require 'async.php';
 });
