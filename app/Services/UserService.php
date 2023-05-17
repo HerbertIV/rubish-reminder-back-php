@@ -7,6 +7,7 @@ use App\Enums\ProcessUserDataChangeEnums;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\Contracts\UserServiceContract;
+use App\Traits\RelationsTrait;
 use Illuminate\Support\Facades\DB;
 
 class UserService implements UserServiceContract
@@ -45,7 +46,7 @@ class UserService implements UserServiceContract
     {
         $user = $this->first($id);
         $userData = $userDto->toArray();
-        unset($userData['email']);
+        unset($userData['email'], $userData['phone']);
         $user->fill($userData);
         $this->startProcess($userDto, $user);
         return $user->save();

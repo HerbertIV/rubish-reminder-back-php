@@ -32,6 +32,7 @@ class ArrayHelper
                 'name' => $value,
             ];
         }
+
         return $result;
     }
 }

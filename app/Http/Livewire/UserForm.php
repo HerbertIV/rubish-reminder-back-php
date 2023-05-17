@@ -6,7 +6,9 @@ namespace App\Http\Livewire;
 
 use App\Dtos\UserDto;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\AsyncResource;
 use App\Models\User;
+use App\Services\Contracts\RegionServiceContract;
 use App\Services\Contracts\UserServiceContract;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -14,11 +16,13 @@ use Livewire\Component;
 class UserForm extends Component
 {
     private UserServiceContract $userService;
+    private RegionServiceContract $regionService;
     public ?string $firstName = '';
     public ?string $lastName = '';
     public ?string $email = '';
     public ?string $phone = '';
     public ?bool $active = false;
+    public ?int $regionId = null;
     public User $user;
     public string $action;
     public array $button;
@@ -26,18 +30,33 @@ class UserForm extends Component
     public function __construct($id = null)
     {
         $this->userService = app(UserServiceContract::class);
+        $this->regionService = app(RegionServiceContract::class);
         parent::__construct($id);
     }
 
     protected $listeners = [
-        'toggleSwitcher'
+        'toggleSwitcher',
+        'selectedCompanyItem',
     ];
+
+    public function selectedCompanyItem($name, $item)
+    {
+        $this->$name = (int)$item;
+    }
 
     public function toggleSwitcher(string $name, bool $value): void
     {
         $this->setData([
             $name => $value
         ]);
+    }
+
+    public function getRegionIdSelect2Format(): ?array
+    {
+        if ($this->regionId) {
+            return AsyncResource::make($this->regionService->first($this->regionId))->resolve();
+        }
+        return null;
     }
 
     protected function getRules()
@@ -52,7 +71,6 @@ class UserForm extends Component
 
         $userDto = new UserDto($this->toArray());
         $user = $this->userService->create($userDto);
-
         $this->emit('saved');
         $this->redirect(route('users.show', $user));
     }
@@ -80,6 +98,7 @@ class UserForm extends Component
                 'email' => $this->user->email,
                 'phone' => $this->user->phone,
                 'active' => $this->user->active,
+                'region_id' => $this->user->region_id,
             ]);
         }
         $this->button = create_button($this->action, 'User');
@@ -98,6 +117,7 @@ class UserForm extends Component
             'email' => $this->email,
             'phone' => $this->phone ?? '',
             'active' => $this->active ?? false,
+            'region_id' => $this->regionId ?? null,
         ];
     }
 

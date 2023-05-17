@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
 use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
+use App\Events\Templates\Sms\SmsReminderEventEvent;
 use App\Models\Template;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -36,6 +37,11 @@ class TemplateSeeder extends Seeder
                 'event_name' => ProcessUserPhoneChangeEmailSendEvent::class,
                 'subject' => 'Process changing phone for user is start',
                 'content' => 'Process changing phone in @VarAppName for user is start @VarProcessUrl',
+            ],
+            [
+                'event_name' => SmsReminderEventEvent::class,
+                'subject' => 'Przypomnienie o odbiorze śmieci',
+                'content' => 'Przypominam że dnia @VarDateExecute w tej miejscowości zbierane są śmieci typu: @VarGarbageType',
             ],
         ];
         DB::transaction(function () use ($templates) {
