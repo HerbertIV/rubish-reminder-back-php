@@ -25,4 +25,9 @@ class Region extends Model
     {
         return $this->hasMany(Region::class, 'parent_id');
     }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }

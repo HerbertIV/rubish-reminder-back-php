@@ -11,5 +11,5 @@ class GarbageTypeEnums extends Enum
 
     public const PLASTIC    = 'plastic';
     public const GLASS      = 'glass';
-    public const PAPER      = 'papier';
+    public const PAPER      = 'paper';
 }

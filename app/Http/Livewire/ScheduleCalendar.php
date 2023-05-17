@@ -17,11 +17,26 @@ class ScheduleCalendar extends Calendar
         'selectedCompanyItem',
     ];
     public $selectedState = false;
+    public array $placeables = [];
 
     public function __construct($id = null)
     {
         $this->scheduleService = app(ScheduleServiceContract::class);
         parent::__construct($id);
+    }
+
+    public function mount(
+        string $formTemplate,
+        array $placeables = []
+    ) {
+        parent::mount($formTemplate);
+        $this->placeables = $placeables;
+        if ($this->placeables) {
+            foreach ($this->placeables as $key => $value) {
+                $this->properties['placeableId'] = reset($value);
+                $this->properties['placeableType'] = $key;
+            }
+        }
     }
 
     public function selectedCompanyItem($name, $item)
@@ -72,9 +87,11 @@ class ScheduleCalendar extends Calendar
         ];
     }
 
-    public function loadEvents(string $start, string $end): array
-    {
-        return $this->scheduleService->getEvents($start, $end);
+    public function loadEvents(
+        string $start,
+        string $end
+    ): array {
+        return $this->scheduleService->getEvents($start, $end, $this->placeables);
     }
 
     public function render()

@@ -31,6 +31,7 @@ class UserRequest extends FormRequest
             'lastName' => ['nullable', 'string', 'max:125'],
             'phone' => ['nullable', 'string', 'max:20'],
             'active' => ['boolean'],
+            'regionId' => ['nullable', 'integer', 'exists:regions,id'],
         ];
     }
 }

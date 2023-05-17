@@ -49,6 +49,13 @@
                     wire:model.defer="phone" />
                 <x-jet-input-error for="phone" class="mt-2" />
             </div>
+            <livewire:components.inputs.select2
+                :selectedData="[$this->getRegionIdSelect2Format()]"
+                isAjax="true"
+                label="{{ __('Regions list') }}"
+                url="{{ route('async.regions') }}"
+                name="regionId" />
+            @error('regionId') <span class="text-red-600">{{ $message }}</span> @enderror
             <div class="form-group col-span-6 sm:col-span-5">
                 <div class="control-label">{{ __('Active') }}</div>
                 <label class="custom-switch mt-2">

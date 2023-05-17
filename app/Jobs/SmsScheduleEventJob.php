@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Services\Contracts\ScheduleServiceContract;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,8 +28,8 @@ class SmsScheduleEventJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(ScheduleServiceContract $scheduleService)
     {
-        //
+        $scheduleService->reminderSchedule();
     }
 }

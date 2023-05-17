@@ -9,5 +9,6 @@ interface ScheduleServiceContract
 {
     public function create(ScheduleDto $scheduleDto): ?Schedule;
     public function delete(int $scheduleId): bool;
-    public function getEvents(string $startDate, string $endDate): array;
+    public function getEvents(string $startDate, string $endDate, array $placeables = []): array;
+    public function reminderSchedule(): void;
 }
