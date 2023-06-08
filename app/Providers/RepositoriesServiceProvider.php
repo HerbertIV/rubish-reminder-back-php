@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\DeviceKeyRepositoryContract;
 use App\Repositories\Contracts\RegionRepositoryContract;
 use App\Repositories\Contracts\ScheduleRepositoryContract;
 use App\Repositories\Contracts\TemplateRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
+use App\Repositories\DeviceKeyRepository;
 use App\Repositories\RegionRepository;
 use App\Repositories\ScheduleRepository;
 use App\Repositories\TemplateRepository;
@@ -19,5 +21,6 @@ class RepositoriesServiceProvider extends ServiceProvider
         UserRepositoryContract::class => UserRepository::class,
         TemplateRepositoryContract::class => TemplateRepository::class,
         ScheduleRepositoryContract::class => ScheduleRepository::class,
+        DeviceKeyRepositoryContract::class => DeviceKeyRepository::class,
     ];
 }

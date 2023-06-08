@@ -22,4 +22,9 @@ abstract class BaseDto
     {
         return $this->relations ?? [];
     }
+
+    public static function init(array $data): BaseDto
+    {
+        return new static($data);
+    }
 }
