@@ -23,7 +23,7 @@ class AppHeadersMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $this->appHeaderService->sync(AppHeadersDto::init($request->headers));
+        $this->appHeaderService->sync(AppHeadersDto::init($request->headers->all()));
         return $next($request);
     }
 }

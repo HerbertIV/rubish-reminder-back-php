@@ -7,14 +7,18 @@ class AppHeadersDto extends BaseDto
     protected string $deviceKey;
     protected string $deviceType;
 
-    protected function setDeviceKey(string $deviceKey): void
+    protected function setDeviceKey(string|array $deviceKey): void
     {
-        $this->deviceKey = $deviceKey;
+        $this->deviceKey = is_array($deviceKey) ?
+            reset($deviceKey) :
+            $deviceKey;
     }
 
-    protected function setDeviceType(string $deviceType): void
+    protected function setDeviceType(string|array $deviceType): void
     {
-        $this->deviceType = $deviceType;
+        $this->deviceType = is_array($deviceType) ?
+            reset($deviceType) :
+            $deviceType;
     }
 
     public function getDeviceKeyDto(): DeviceKeyDto
