@@ -1,17 +1,105 @@
-<script setup>
+<script>
 import { Head, Link } from '@inertiajs/vue3';
+import axios from "axios";
+import firebase from "firebase/app";
+import "firebase/messaging";
 
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-});
+export default {
+    props() {
+      return {
+          canLogin: Boolean,
+          canRegister: Boolean,
+          laravelVersion: String,
+          phpVersion: String,
+      };
+    },
+    data() {
+        return {
+            // use a getter and setter to watch the user's notification preference in local storage
+            get requestPermission() {
+                return (localStorage.getItem("notificationPref") === null)
+            },
+            set requestPermission(value) {
+                localStorage.setItem("notificationPref", value)
+            }
+        }
+    },
+    mounted() {
+        this.initializeFirebase();
+    },
+    methods: {
+        registerToken(token) {
+            console.log(token);
+            axios.get(
+                "/api/check",
+                {
+                    headers: {
+                        "Content-type": "application/json",
+                        Accept: "application/json",
+                        "device-key": token,
+                        "device-type": 'web'
+                    }
+                }
+            ).then(response => {
+                console.log(response)
+            });
+        },
+
+        enableNotifications() {
+            if (!("Notification" in window)) {
+                alert("Notifications are not supported");
+            } else if (Notification.permission === "granted") {
+                this.initializeFirebase();
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        this.initializeFirebase();
+                    }
+                })
+            } else {
+                alert("No permission to send notification")
+            }
+            this.requestPermission = Notification.permission;
+        },
+
+        initializeFirebase () {
+            if (firebase.messaging.isSupported()) {
+                let config = {
+                    apiKey: "AIzaSyAhixKv2Ah_QXF96gOUF2zxpoec2JFhsPg",
+                    authDomain: "rubishback.firebaseapp.com",
+                    projectId: "rubishback",
+                    messagingSenderId: "163284422021",
+                    appId: "1:163284422021:web:1b14da1eee2698000608ec",
+                };
+                firebase.initializeApp(config);
+                const messaging = firebase.messaging();;
+
+                messaging.getToken()
+                    .then((token) => {
+                        this.registerToken(token)
+                    })
+                    .catch((err) => {
+                        console.log('An error occurred while retrieving token. ', err);
+                    });
+
+                messaging.onMessage(function (payload) {
+                    console.log("Message received", payload);
+                    let n = new Notification("New Recipe alert!")
+                });
+            }
+        }
+    }
+};
+
 </script>
 
 <template>
     <Head title="Welcome" />
-
+    <div class="sticky-top alert alert-primary" v-if="requestPermission"
+         v-on:click="enableNotifications">
+        Want to know when we publish a new recipe?
+        <button class="btn btn-sm btn-dark">Enable Notifications</button>
+    </div>
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white"
     >

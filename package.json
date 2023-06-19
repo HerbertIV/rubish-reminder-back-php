@@ -28,8 +28,9 @@
         "@fullcalendar/list": "^6.1.5",
         "@fullcalendar/timegrid": "^6.1.5",
         "autoprefixer": "10.4.12",
-        "firebase": "^9.22.2",
+        "firebase": "^7.24.0",
         "firebase-tools": "^12.4.0",
-        "izitoast": "^1.4.0"
+        "izitoast": "^1.4.0",
+        "vue-router": "^4.2.2"
     }
 }

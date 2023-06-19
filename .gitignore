@@ -16,3 +16,4 @@ yarn-error.log
 .DS_Store
 
 packages/custom
+public/workbox*
