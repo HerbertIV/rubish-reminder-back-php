@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('check', [CheckController::class, 'check']);
 
 Route::resource('regions', RegionController::class);
+
