@@ -2,7 +2,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -10,8 +10,7 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '8000:80'
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -48,11 +47,31 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
-    mailhog:
-        image: 'mailhog/mailhog:latest'
+    nginx-proxy:
+        image: nginx:latest
         ports:
-            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
-            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+            - '80:80'
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+            - './nginx.conf:/etc/nginx/nginx.conf:ro'
+            - './proxy.conf:/etc/nginx/includes/proxy.conf'
+            - ./docker/nginx-proxy/certs:/etc/nginx/certs:ro
+        networks:
+            - sail
+        depends_on:
+            - laravel.test
+        environment:
+            TRUST_DOWNSTREAM_PROXY: 'false'
+    caddy:
+        image: caddy:latest
+        ports:
+            - '443:443'
+        volumes:
+            - './docker/Caddyfile:/etc/caddy/Caddyfile'
+            - './caddy_data:/data'
+            - './caddy_config:/config'
+        depends_on:
+            - nginx-proxy
         networks:
             - sail
 networks:

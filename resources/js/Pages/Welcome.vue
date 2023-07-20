@@ -29,7 +29,6 @@ export default {
     },
     methods: {
         registerToken(token) {
-            console.log(token);
             axios.get(
                 "/api/check",
                 {
@@ -41,7 +40,6 @@ export default {
                     }
                 }
             ).then(response => {
-                console.log(response)
             });
         },
 
@@ -71,17 +69,15 @@ export default {
                     messagingSenderId: "163284422021",
                     appId: "1:163284422021:web:1b14da1eee2698000608ec",
                 };
-                firebase.initializeApp(config);
-                const messaging = firebase.messaging();;
-
+                !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
+                const messaging = firebase.messaging();
                 messaging.getToken()
                     .then((token) => {
-                        this.registerToken(token)
+                        this.registerToken(token);
                     })
                     .catch((err) => {
                         console.log('An error occurred while retrieving token. ', err);
                     });
-
                 messaging.onMessage(function (payload) {
                     console.log("Message received", payload);
                     let n = new Notification("New Recipe alert!")

@@ -1,0 +1,6 @@
+server-1673948-1.artigno.pl {
+    reverse_proxy nginx-proxy:80
+    tls {
+        on_demand
+    }
+}

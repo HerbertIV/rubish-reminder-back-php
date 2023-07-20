@@ -39,6 +39,9 @@ require __DIR__.'/auth.php';
 
 
 Route::get('test', function () {
-    $token = '';
-
+    try {
+        dd(App\Models\DeviceKey::get());
+    } catch (\Throwable $ex) {
+        dd($ex);
+    }
 });

@@ -12,9 +12,7 @@
 
         <!-- Scripts -->
         @routes
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
-        <link rel="manifest" href="manifest.json" />
     </head>
     <body class="font-sans antialiased">
         @inertia
@@ -26,4 +24,5 @@
             });
         }
     </script>
+    @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
 </html>

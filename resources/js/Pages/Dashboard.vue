@@ -1,24 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { getMessaging, getToken } from "firebase/messaging";
-
-const initToken = () => {
-
-    const messaging = getMessaging();
-    getToken(messaging, { vapidKey: 'BNK8tMAoXcmJqCU4t-FLyufAk2FjFEB5e6xVweo8Scrs-k1jZMe5WUnk5R6HQV2sf3aE0Gfmpf_lTU8BTCIMTV8' }).then((currentToken) => {
-        if (currentToken) {
-            console.log(currentToken);
-        } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            // ...
-        }
-    }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-        // ...
-    });
-}
 </script>
 
 <template>
@@ -37,5 +19,4 @@ const initToken = () => {
             </div>
         </div>
     </AuthenticatedLayout>
-    <button @click="initToken">INIT</button>
 </template>
