@@ -15,28 +15,32 @@ class DeviceKeyService implements DeviceKeyServiceContract
     ) {
     }
 
-    public function sync(DeviceKeyDto $deviceKeyDto): DeviceKey
+    public function sync(?DeviceKeyDto $deviceKeyDto = null): void
     {
-        $deviceKey = $this->deviceKeyRepository->query()->whereDeviceKey($deviceKeyDto->getDeviceKey())->first();
-        if (!$deviceKey) {
+        if ($deviceKeyDto) {
+            $deviceKey = $this->deviceKeyRepository->query()->whereDeviceKey($deviceKeyDto->getDeviceKey())->first();
+            if (!$deviceKey) {
 
-            return $this->create($deviceKeyDto);
+                $this->create($deviceKeyDto);
+            }
         }
-
-        return $deviceKey;
     }
 
-    public function create(DeviceKeyDto $deviceKeyDto): DeviceKey
+    public function create(?DeviceKeyDto $deviceKeyDto = null): void
     {
-        return DB::transaction(fn () => $this->deviceKeyRepository->query()->create($deviceKeyDto->toArray()));
+        if ($deviceKeyDto) {
+            DB::transaction(fn () => $this->deviceKeyRepository->query()->create($deviceKeyDto->toArray()));
+        }
     }
 
-    public function update(DeviceKeyDto $deviceKeyDto): DeviceKey
+    public function update(?DeviceKeyDto $deviceKeyDto = null): void
     {
-        return DB::transaction(fn () => $this
-            ->deviceKeyRepository
-            ->query()
-            ->whereDeviceKey($deviceKeyDto->getDeviceKey())
-            ->update($deviceKeyDto->toArray()));
+        if ($deviceKeyDto) {
+            DB::transaction(fn () => $this
+                ->deviceKeyRepository
+                ->query()
+                ->whereDeviceKey($deviceKeyDto->getDeviceKey())
+                ->update($deviceKeyDto->toArray()));
+        }
     }
 }

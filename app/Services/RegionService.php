@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Dtos\Filters\Contracts\FiltersDtoContract;
 use App\Dtos\RegionDto;
 use App\Exceptions\HasChildrenException;
 use App\Models\Region;
 use App\Repositories\Contracts\RegionRepositoryContract;
 use App\Services\Contracts\RegionServiceContract;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class RegionService implements RegionServiceContract
@@ -48,5 +50,10 @@ class RegionService implements RegionServiceContract
     public function update(RegionDto $regionDto, int $id): bool
     {
         return DB::transaction(fn () => $this->regionRepository->where(['id' => $id])->update($regionDto->toArray()));
+    }
+
+    public function get(?FiltersDtoContract $filtersDto = null): Collection
+    {
+        return $this->regionRepository->queryWithCriteria($filtersDto)->get();
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CheckController;
-use App\Http\Controllers\RegionController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\RegionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('check', [CheckController::class, 'check']);
 
-Route::resource('regions', RegionController::class);
-
+Route::get('regions', [RegionController::class, 'index']);
+Route::post('check-region', [RegionController::class, 'checkRegion']);
 

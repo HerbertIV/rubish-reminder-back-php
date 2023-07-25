@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SmsScheduleEventJob implements ShouldQueue
+class PushScheduleEventJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class SmsScheduleEventJob implements ShouldQueue
      */
     public function handle(ScheduleServiceContract $scheduleService)
     {
-        $scheduleService->reminderSchedule(ReceiverTypes::SMS);
+        $scheduleService->reminderSchedule(ReceiverTypes::PUSH);
     }
 }

@@ -3,10 +3,11 @@
 namespace App\Services;
 
 use App\Dtos\ScheduleDto;
+use App\Enums\ReceiverTypes;
 use App\Events\Templates\Sms\SmsReminderEventEvent;
-use App\Models\Region;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleRepositoryContract;
+use App\Services\Contracts\PushMessageServiceContract;
 use App\Services\Contracts\ScheduleServiceContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\DB;
 class ScheduleService implements ScheduleServiceContract
 {
     public function __construct(
-        private ScheduleRepositoryContract $scheduleRepository
+        private ScheduleRepositoryContract $scheduleRepository,
+        private PushMessageServiceContract $pushMessageService
     ) {
     }
 
@@ -58,13 +60,26 @@ class ScheduleService implements ScheduleServiceContract
         ])->toArray();
     }
 
-    public function reminderSchedule(): void
+    public function reminderSchedule(string $type = ''): void
     {
         $schedules = $this->scheduleRepository
             ->query()
             ->where('execute_datetime', '=', now()->modify('+1 day')->format('Y-m-d'))
             ->get();
-        $this->smsSend($schedules);
+
+        //TODO change to strategy
+        switch ($type) {
+            case ReceiverTypes::SMS:
+                $this->smsSend($schedules);
+                break;
+            case ReceiverTypes::PUSH:
+                $this->pushSend($schedules);
+                break;
+            case ReceiverTypes::EMAIL:
+                $this->emailSend($schedules);
+                break;
+        }
+
     }
 
     private function smsSend(Collection $schedules): void
@@ -76,6 +91,20 @@ class ScheduleService implements ScheduleServiceContract
                     $user,
                     $schedule
                 ));
+            }
+        }
+    }
+
+    private function pushSend(Collection $schedules): void
+    {
+        foreach ($schedules as $schedule) {
+            /* @var Schedule $schedule */
+            foreach ($schedule->placeable->deviceKeys as $deviceKey) {
+                $this->pushMessageService->sendPush(
+                    $deviceKey->device_key,
+                    'Przypomnienie o zbiórce śmieci.',
+                    'Dzisiaj zbiórka śmieci typu ' . __($schedule->garbage_type)
+                );
             }
         }
     }

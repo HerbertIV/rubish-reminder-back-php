@@ -21,11 +21,13 @@ class AppHeadersDto extends BaseDto
             $deviceType;
     }
 
-    public function getDeviceKeyDto(): DeviceKeyDto
+    public function getDeviceKeyDto(): ?DeviceKeyDto
     {
-        return DeviceKeyDto::init([
-            'device_key' => $this->deviceKey,
-            'device_type' => $this->deviceType,
-        ]);
+        return (($this->deviceKey ?? false) && ($this->deviceType ?? false)) ?
+            DeviceKeyDto::init([
+                'device_key' => $this->deviceKey ?? '',
+                'device_type' => $this->deviceType ?? '',
+            ]) :
+            null;
     }
 }

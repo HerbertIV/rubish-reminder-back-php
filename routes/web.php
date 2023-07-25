@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,18 +33,16 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('/users', UserController::class);
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::resource('/regions', RegionController::class);
+
+    require 'async.php';
 });
 
 require __DIR__.'/auth.php';
 
-
 Route::get('test', function () {
-    try {
-        dd(App\Models\DeviceKey::get());
-    } catch (\Throwable $ex) {
-        dd($ex);
-    }
+    $region = \App\Models\Region::where('id', 2)->first();
+    dd($region->deviceKeys);
 });

@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\SmsScheduleEventJob;
+use App\Jobs\PushScheduleEventJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-//        $schedule->job(SmsScheduleEventJob::class)->dailyAt('17:00');
+        $schedule->job(PushScheduleEventJob::class)->dailyAt('17:00');
         $schedule->command('test:notification')->everyMinute();
     }
 

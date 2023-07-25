@@ -35,7 +35,7 @@ class TestNotifiactionCommand extends Command
         $deviceKeys = $deviceKeyRepository->query()->get();
         foreach ($deviceKeys as $deviceKey) {
             $this->output->info('key: ' . $deviceKey->device_key);
-            $pushMessageService->sendPush($deviceKey, 'Przypomnienie o śmieciach', 'Przypominam sie o śmieciach.');
+            $pushMessageService->sendPush($deviceKey->device_key, 'Przypomnienie o śmieciach', 'Przypominam sie o śmieciach.');
         }
 
         return Command::SUCCESS;
