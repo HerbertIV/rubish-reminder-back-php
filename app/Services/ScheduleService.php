@@ -3,22 +3,20 @@
 namespace App\Services;
 
 use App\Dtos\ScheduleDto;
-use App\Enums\ReceiverTypes;
-use App\Events\Templates\Sms\SmsReminderEventEvent;
+use App\Helpers\StrategyHelper;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleRepositoryContract;
-use App\Services\Contracts\PushMessageServiceContract;
 use App\Services\Contracts\ScheduleServiceContract;
+use App\Strategies\ScheduleSends\MainScheduleSendStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ScheduleService implements ScheduleServiceContract
 {
     public function __construct(
-        private ScheduleRepositoryContract $scheduleRepository,
-        private PushMessageServiceContract $pushMessageService
+        private ScheduleRepositoryContract $scheduleRepository
     ) {
     }
 
@@ -66,52 +64,13 @@ class ScheduleService implements ScheduleServiceContract
             ->query()
             ->where('execute_datetime', '=', now()->modify('+1 day')->format('Y-m-d'))
             ->get();
-
-        //TODO change to strategy
-        switch ($type) {
-            case ReceiverTypes::SMS:
-                $this->smsSend($schedules);
-                break;
-            case ReceiverTypes::PUSH:
-                $this->pushSend($schedules);
-                break;
-            case ReceiverTypes::EMAIL:
-                $this->emailSend($schedules);
-                break;
-        }
-
-    }
-
-    private function smsSend(Collection $schedules): void
-    {
-        foreach ($schedules as $schedule) {
-            /* @var Schedule $schedule */
-            foreach ($schedule->placeable->users as $user) {
-                event(new SmsReminderEventEvent(
-                    $user,
-                    $schedule
-                ));
-            }
-        }
-    }
-
-    private function pushSend(Collection $schedules): void
-    {
-        foreach ($schedules as $schedule) {
-            /* @var Schedule $schedule */
-            foreach ($schedule->placeable->deviceKeys as $deviceKey) {
-                $this->pushMessageService->sendPush(
-                    $deviceKey->device_key,
-                    'Przypomnienie o zbiórce śmieci.',
-                    'Dzisiaj zbiórka śmieci typu ' . __($schedule->garbage_type)
-                );
-            }
-        }
-    }
-
-    private function emailSend(Collection $schedules): void
-    {
-
+        StrategyHelper::makeStrategy(
+            'App\Strategies\ScheduleSends\\',
+            Str::ucfirst($type) . 'ScheduleSend',
+            MainScheduleSendStrategy::class,
+            'sendSchedule',
+            ['schedules' => $schedules]
+        );
     }
 
     private function canCreate(ScheduleDto $scheduleDto): bool

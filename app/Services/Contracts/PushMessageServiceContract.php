@@ -2,7 +2,9 @@
 
 namespace App\Services\Contracts;
 
+use Illuminate\Support\Collection;
+
 interface PushMessageServiceContract
 {
-    public function sendPush(string $deviceKey, string $title, string $body): void;
+    public function prepareScheduleAndSend(Collection $schedules): void;
 }

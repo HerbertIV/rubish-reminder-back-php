@@ -18,6 +18,11 @@ abstract class BaseDto
         $this->relations = $relations;
     }
 
+    protected function pushToRelations(string $key, $value): void
+    {
+        $this->relations[$key] = $value;
+    }
+
     public function getRelations(): array
     {
         return $this->relations ?? [];

@@ -32,7 +32,7 @@ class TestNotifiactionCommand extends Command
         DeviceKeyRepositoryContract $deviceKeyRepository
     )
     {
-        $deviceKeys = $deviceKeyRepository->query()->get();
+        $deviceKeys = $deviceKeyRepository->query()->orderBy('id', 'asc')->get();
         foreach ($deviceKeys as $deviceKey) {
             $this->output->info('key: ' . $deviceKey->device_key);
             $pushMessageService->sendPush($deviceKey->device_key, 'Przypomnienie o śmieciach', 'Przypominam sie o śmieciach.');

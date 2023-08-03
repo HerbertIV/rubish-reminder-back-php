@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Dtos\API\CheckRegionDto;
 use App\Dtos\DeviceKeyDto;
-use App\Models\DeviceKey;
+use App\Helpers\StrategyHelper;
 use App\Repositories\Contracts\DeviceKeyRepositoryContract;
 use App\Services\Contracts\DeviceKeyServiceContract;
+use App\Strategies\Relations\MainRelationStrategy;
 use Illuminate\Support\Facades\DB;
 
 class DeviceKeyService implements DeviceKeyServiceContract
@@ -41,6 +43,19 @@ class DeviceKeyService implements DeviceKeyServiceContract
                 ->query()
                 ->whereDeviceKey($deviceKeyDto->getDeviceKey())
                 ->update($deviceKeyDto->toArray()));
+        }
+    }
+
+    public function checkRegions(CheckRegionDto $checkRegionDto)
+    {
+        foreach ($checkRegionDto->getRelations() as $relationKey => $relation) {
+            StrategyHelper::makeStrategy(
+                'App\Strategies\Relations\\',
+                $relationKey,
+                MainRelationStrategy::class,
+                'setRelation',
+                $relation
+            );
         }
     }
 }

@@ -4,7 +4,7 @@ namespace App\Strategies\Relations;
 
 use App\Strategies\Contracts\RelationStrategyContract;
 
-abstract class MainRelationStrategy
+class MainRelationStrategy
 {
     public function __construct(
         private RelationStrategyContract $relationStrategy
