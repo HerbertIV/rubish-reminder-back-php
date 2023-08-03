@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Events\CreateModelEvent;
-use App\Events\Regions\RegionCreateEvent;
+use App\Dtos\Filters\Contracts\FiltersDtoContract;
 use App\Repositories\Contracts\BaseRepositoryContract;
+use App\Repositories\Criterion\Contracts\CriterionContract;
 use Exception;
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Builder;
@@ -73,4 +73,25 @@ abstract class BaseRepository implements BaseRepositoryContract
     {
         return $this->query()->whereIn($column, $values);
     }
+
+    public function queryWithCriteria(?FiltersDtoContract $filtersDto = null): Builder
+    {
+        if ($filtersDto) {
+            return $this->applyCriteria($this->query(), ($filtersDto->getCriteria() ?? []));
+        }
+
+        return $this->query();
+    }
+
+    public function applyCriteria(Builder $query, array $criteria): Builder
+    {
+        foreach ($criteria as $criterion) {
+            if ($criterion instanceof CriterionContract) {
+                $query = $criterion->apply($query);
+            }
+        }
+
+        return $query;
+    }
+
 }

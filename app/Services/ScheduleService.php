@@ -3,15 +3,15 @@
 namespace App\Services;
 
 use App\Dtos\ScheduleDto;
-use App\Events\Templates\Sms\SmsReminderEventEvent;
-use App\Models\Region;
+use App\Helpers\StrategyHelper;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleRepositoryContract;
 use App\Services\Contracts\ScheduleServiceContract;
+use App\Strategies\ScheduleSends\MainScheduleSendStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ScheduleService implements ScheduleServiceContract
 {
@@ -58,31 +58,19 @@ class ScheduleService implements ScheduleServiceContract
         ])->toArray();
     }
 
-    public function reminderSchedule(): void
+    public function reminderSchedule(string $type = ''): void
     {
         $schedules = $this->scheduleRepository
             ->query()
             ->where('execute_datetime', '=', now()->modify('+1 day')->format('Y-m-d'))
             ->get();
-        $this->smsSend($schedules);
-    }
-
-    private function smsSend(Collection $schedules): void
-    {
-        foreach ($schedules as $schedule) {
-            /* @var Schedule $schedule */
-            foreach ($schedule->placeable->users as $user) {
-                event(new SmsReminderEventEvent(
-                    $user,
-                    $schedule
-                ));
-            }
-        }
-    }
-
-    private function emailSend(Collection $schedules): void
-    {
-
+        StrategyHelper::makeStrategy(
+            'App\Strategies\ScheduleSends\\',
+            Str::ucfirst($type) . 'ScheduleSend',
+            MainScheduleSendStrategy::class,
+            'sendSchedule',
+            ['schedules' => $schedules]
+        );
     }
 
     private function canCreate(ScheduleDto $scheduleDto): bool

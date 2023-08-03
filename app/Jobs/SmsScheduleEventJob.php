@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\ReceiverTypes;
 use App\Services\Contracts\ScheduleServiceContract;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +31,6 @@ class SmsScheduleEventJob implements ShouldQueue
      */
     public function handle(ScheduleServiceContract $scheduleService)
     {
-        $scheduleService->reminderSchedule();
+        $scheduleService->reminderSchedule(ReceiverTypes::SMS);
     }
 }

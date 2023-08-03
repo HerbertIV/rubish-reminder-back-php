@@ -17,9 +17,7 @@ class TemplateListener
     public function handle($event)
     {
         $eventWrapper = new EventWrapper($event);
-        if ($eventWrapper->user()) {
-            // we only want to handle User related events (probably?)
-            Template::handleEvent($eventWrapper);
-        }
+        // we only want to handle User related events (probably?)
+        Template::handleEvent($eventWrapper);
     }
 }

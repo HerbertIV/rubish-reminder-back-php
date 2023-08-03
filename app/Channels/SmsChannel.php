@@ -12,12 +12,15 @@ class SmsChannel implements NotificationChannelContract
     public static function send(EventWrapper $event, array $sections): bool
     {
         Log::channel('sms')->debug('sms content', [
-            'to_phone' => $event->user()->phone,
+            'to_phone' => $event->getReceiver()->phone,
             'content' => $sections['content']
         ]);
         // TODO After tests uncomment and remove log
         $sms = new Sms();
-        $sms->send($event->user()->phone, $sections['content']);
+        foreach ($event->getReceiver() as $receiver) {
+            $sms->send($receiver->phone, $sections['content']);
+        }
+
         return true;
     }
 }

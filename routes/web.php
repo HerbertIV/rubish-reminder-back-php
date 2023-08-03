@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,22 +19,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/welcome', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
-Route::group(['prefix' => '/users/process'], function () {
-    Route::get('/change-email/{token}', [UserController::class, 'changeEmail'])->name('user.process.email');
-    Route::get('/change-phone/{token}', [UserController::class, 'changePhone'])->name('user.process.phone');
-    Route::post('/change-phone/{token}', [UserController::class, 'smsCodeVerify'])->name('user.sms-code.verify');
-});
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::group([ "middleware" => ['auth:sanctum', config('jetstream.auth_session'), 'verified'] ], function() {
-    Route::view('/dashboard', "dashboard")->name('dashboard');
-
-    Route::resource('/regions', RegionController::class);
+Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::resource('/regions', RegionController::class);
 
     require 'async.php';
+});
+
+require __DIR__.'/auth.php';
+
+Route::get('test', function () {
+    $region = \App\Models\Region::where('id', 2)->first();
+    dd($region->deviceKeys);
 });

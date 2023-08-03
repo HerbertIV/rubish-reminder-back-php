@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Events\Templates\Mails\ProcessUserEmailChangeEvent;
 use App\Events\Templates\Mails\ProcessUserPhoneChangeEmailSendEvent;
+use App\Events\Templates\Push\PushReminderEventEvent;
 use App\Events\Templates\Sms\ProcessUserPhoneChangeEvent;
 use App\Events\Templates\Sms\SmsReminderEventEvent;
 use App\Models\Template;
@@ -40,6 +41,11 @@ class TemplateSeeder extends Seeder
             ],
             [
                 'event_name' => SmsReminderEventEvent::class,
+                'subject' => 'Przypomnienie o odbiorze śmieci',
+                'content' => 'Przypominam że dnia @VarDateExecute w tej miejscowości zbierane są śmieci typu: @VarGarbageType',
+            ],
+            [
+                'event_name' => PushReminderEventEvent::class,
                 'subject' => 'Przypomnienie o odbiorze śmieci',
                 'content' => 'Przypominam że dnia @VarDateExecute w tej miejscowości zbierane są śmieci typu: @VarGarbageType',
             ],

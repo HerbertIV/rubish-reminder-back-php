@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\CheckController;
+use App\Http\Controllers\API\RegionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('check', [CheckController::class, 'check']);
 
-Route::resource('regions', \App\Http\Controllers\RegionController::class);
+Route::get('regions', [RegionController::class, 'index']);
+Route::post('check-region', [RegionController::class, 'checkRegion']);
+

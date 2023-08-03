@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="{{ asset('vendor/notyf/notyf.min.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        @vite(['resources/css/app.css'])
+{{--        @vite(['resources/css/app.css'])--}}
 
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free-v4-shims.min.css" media="all">
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free-v4-font-face.min.css" media="all">
