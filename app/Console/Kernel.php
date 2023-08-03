@@ -16,9 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->job(PushScheduleEventJob::class)->dailyAt('17:00');
-        $schedule->command('test:notification')->everyMinute();
     }
 
     /**
