@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegionController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Inertia\RegionController;
+use App\Http\Controllers\Inertia\ScheduleController;
+use App\Http\Controllers\Inertia\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,7 +18,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/welcome', function () {
+Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -28,9 +27,15 @@ Route::get('/welcome', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
@@ -38,11 +43,4 @@ Route::middleware('auth')->group(function () {
     Route::resource('/regions', RegionController::class);
 
     require 'async.php';
-});
-
-require __DIR__.'/auth.php';
-
-Route::get('test', function () {
-    $region = \App\Models\Region::where('id', 2)->first();
-    dd($region->deviceKeys);
 });

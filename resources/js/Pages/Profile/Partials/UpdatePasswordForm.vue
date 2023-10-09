@@ -1,10 +1,12 @@
 <script setup>
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import ActionMessage from '@/Components/ActionMessage.vue';
+import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -16,7 +18,8 @@ const form = useForm({
 });
 
 const updatePassword = () => {
-    form.put(route('password.update'), {
+    form.put(route('user-password.update'), {
+        errorBag: 'updatePassword',
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => {
@@ -24,6 +27,7 @@ const updatePassword = () => {
                 form.reset('password', 'password_confirmation');
                 passwordInput.value.focus();
             }
+
             if (form.errors.current_password) {
                 form.reset('current_password');
                 currentPasswordInput.value.focus();
@@ -34,19 +38,18 @@ const updatePassword = () => {
 </script>
 
 <template>
-    <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Update Password</h2>
+    <FormSection @submitted="updatePassword">
+        <template #title>
+            Update Password
+        </template>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Ensure your account is using a long, random password to stay secure.
-            </p>
-        </header>
+        <template #description>
+            Ensure your account is using a long, random password to stay secure.
+        </template>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
-            <div>
+        <template #form>
+            <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="current_password" value="Current Password" />
-
                 <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
@@ -55,13 +58,11 @@ const updatePassword = () => {
                     class="mt-1 block w-full"
                     autocomplete="current-password"
                 />
-
                 <InputError :message="form.errors.current_password" class="mt-2" />
             </div>
 
-            <div>
+            <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="password" value="New Password" />
-
                 <TextInput
                     id="password"
                     ref="passwordInput"
@@ -70,13 +71,11 @@ const updatePassword = () => {
                     class="mt-1 block w-full"
                     autocomplete="new-password"
                 />
-
                 <InputError :message="form.errors.password" class="mt-2" />
             </div>
 
-            <div>
+            <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="password_confirmation" value="Confirm Password" />
-
                 <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
@@ -84,17 +83,18 @@ const updatePassword = () => {
                     class="mt-1 block w-full"
                     autocomplete="new-password"
                 />
-
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
+        </template>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+        <template #actions>
+            <ActionMessage :on="form.recentlySuccessful" class="mr-3">
+                Saved.
+            </ActionMessage>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                </Transition>
-            </div>
-        </form>
-    </section>
+            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                Save
+            </PrimaryButton>
+        </template>
+    </FormSection>
 </template>
