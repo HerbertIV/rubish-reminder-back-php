@@ -7,6 +7,7 @@ use BenSampo\Enum\Enum;
 class GarbageTypeEnums extends Enum
 {
     public const SEGREGATED = 'segregated';
+    public const SEGREGATED_WITHOUT_GLASS = 'segregated_without_glass';
     public const MIXED_UP   = 'mixed_up';
 
     public const PLASTIC    = 'plastic';

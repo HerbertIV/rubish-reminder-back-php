@@ -52,7 +52,7 @@ class ScheduleService implements ScheduleServiceContract
                 ['execute_datetime', '>=', $startDate],
             ]);
         return $query->get()->map(fn (Schedule $schedule) => [
-            'title' => $schedule->garbage_type . ' - ' . $schedule->placeable->name,
+            'title' => __($schedule->garbage_type) . ' - ' . $schedule->placeable->name,
             'start' => Carbon::make($schedule->execute_datetime)->format('Y-m-d'),
             'id' => $schedule->getKey()
         ])->toArray();

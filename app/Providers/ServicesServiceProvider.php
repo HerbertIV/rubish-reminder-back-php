@@ -8,6 +8,7 @@ use App\Services\Contracts\AppHeaderServiceContract;
 use App\Services\Contracts\AsyncServiceContract;
 use App\Services\Contracts\DeviceKeyServiceContract;
 use App\Services\Contracts\EmailServiceContract;
+use App\Services\Contracts\IcsServiceContract;
 use App\Services\Contracts\PushMessageServiceContract;
 use App\Services\Contracts\ReceiverServiceContract;
 use App\Services\Contracts\RegionServiceContract;
@@ -17,6 +18,7 @@ use App\Services\Contracts\TemplateEventServiceContract;
 use App\Services\Contracts\UserServiceContract;
 use App\Services\DeviceKeyService;
 use App\Services\EmailService;
+use App\Services\IcsService;
 use App\Services\PushMessageService;
 use App\Services\ReceiverService;
 use App\Services\RegionService;
@@ -40,5 +42,6 @@ class ServicesServiceProvider extends ServiceProvider
         ReceiverServiceContract::class      => ReceiverService::class,
         SmsServiceContract::class           => SmsService::class,
         EmailServiceContract::class         => EmailService::class,
+        IcsServiceContract::class           => IcsService::class,
     ];
 }
