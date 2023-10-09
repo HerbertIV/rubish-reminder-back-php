@@ -1,7 +1,8 @@
 {
-    "segregated"    : "Segregowane",
-    "mixed_up"      : "Zmieszane",
-    "plastic"       : "Plastik",
-    "glass"         : "Szkło",
-    "paper"         : "Papier"
+    "segregated"                    : "Segregowane",
+    "segregated_without_glass"      : "Segregowane bez szkła",
+    "mixed_up"                      : "Zmieszane",
+    "plastic"                       : "Plastik",
+    "glass"                         : "Szkło",
+    "paper"                         : "Papier"
 }
