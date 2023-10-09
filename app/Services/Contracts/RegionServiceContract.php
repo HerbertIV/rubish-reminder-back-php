@@ -15,5 +15,4 @@ interface RegionServiceContract
     public function delete(int $id): bool;
     public function update(RegionDto $regionDto, int $id): bool;
     public function get(FiltersDtoContract $filtersDto): Collection;
-    public function sendPushes(): void;
 }
